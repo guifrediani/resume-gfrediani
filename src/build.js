@@ -4,6 +4,7 @@
 
 import { readFileSync, writeFileSync, mkdirSync, rmSync, copyFileSync, readdirSync, existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { validate, formatMessage } from "./validate.js";
 import { renderPage } from "./render.js";
@@ -71,7 +72,12 @@ function main() {
     process.exit(1);
   }
 
-  const html = renderPage(content, template);
+  // Version the asset URLs by content so browsers never pair a new page with a cached old
+  // stylesheet or script (GitHub Pages lets browsers cache them for 10 minutes).
+  const version = (file) => createHash("sha256").update(readFileSync(file)).digest("hex").slice(0, 10);
+  const html = renderPage(content, template)
+    .replace('href="styles.css"', `href="styles.css?v=${version(STYLES)}"`)
+    .replace('src="enhance.js"', `src="enhance.js?v=${version(SCRIPT)}"`);
 
   rmSync(options.out, { recursive: true, force: true });
   mkdirSync(join(options.out, "icons"), { recursive: true });

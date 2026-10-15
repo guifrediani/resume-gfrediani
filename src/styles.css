@@ -32,6 +32,7 @@
   --gutter: 20px; --gutter-md: 40px; --gutter-lg: 80px;
   --container: 1440px; --container-wide: 1196.667px; --container-narrow: 953.333px; --container-text: 466.667px;
   --measure: 72ch;
+  --content-max: var(--container-wide);
 
   /* Shape */
   --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-xl: 24px; --radius-pill: 32px;
@@ -55,6 +56,13 @@
   :root {
     --header-height: 76px;
     --scroll-offset: 96px;
+  }
+}
+
+/* Large monitors get the design system's full 1440px container. */
+@media (min-width: 1600px) {
+  :root {
+    --content-max: var(--container);
   }
 }
 
@@ -314,7 +322,7 @@ main {
 }
 
 .section__inner {
-  max-width: var(--container-wide);
+  max-width: var(--content-max);
   margin: 0 auto;
 }
 
@@ -331,7 +339,7 @@ main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: var(--space-20);
     width: 100%;
-    max-width: calc(var(--container-wide) + 2 * var(--gutter-lg));
+    max-width: calc(var(--content-max) + 2 * var(--gutter-lg));
     margin: 0 auto;
   }
 
@@ -364,7 +372,7 @@ main {
 
 .site-header__inner {
   height: var(--header-height);
-  max-width: calc(var(--container-wide) + 2 * var(--gutter-lg));
+  max-width: calc(var(--content-max) + 2 * var(--gutter-lg));
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -580,6 +588,22 @@ main {
   }
 }
 
+/* Wide screens: dates, role and description sit in three columns, so each
+   entry fills the row instead of a single text column on the left. */
+@media (min-width: 1280px) {
+  .section:not(.section--half) .entry {
+    grid-template-columns: 160px minmax(0, 4fr) minmax(0, 7fr);
+    grid-template-areas: "dates title description";
+    column-gap: var(--space-12);
+    padding: var(--space-10) 0;
+  }
+
+  .section:not(.section--half) .entry__description {
+    max-width: none;
+    padding-top: 0.35em;
+  }
+}
+
 .entry-list--compact {
   gap: var(--space-5);
 }
@@ -671,7 +695,7 @@ main {
   justify-content: space-between;
   gap: var(--space-4);
   flex-wrap: wrap;
-  max-width: calc(var(--container-wide) + 2 * var(--gutter-lg));
+  max-width: calc(var(--content-max) + 2 * var(--gutter-lg));
   margin: 0 auto;
   padding-top: var(--space-15);
   padding-bottom: var(--space-10);

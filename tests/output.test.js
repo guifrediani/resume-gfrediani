@@ -41,7 +41,9 @@ test("document is English-US, loads only its own enhancement script, and has no 
     assert.ok(!html.toLowerCase().includes(tag), `${tag} must not appear`);
   }
   const sources = [...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)].map((m) => m[1]);
-  assert.deepEqual(sources, ["enhance.js"]);
+  assert.equal(sources.length, 1);
+  assert.match(sources[0], /^enhance\.js\?v=[0-9a-f]{10}$/, "script URL is versioned by content");
+  assert.match(html, /<link rel="stylesheet" href="styles\.css\?v=[0-9a-f]{10}">/, "stylesheet URL is versioned by content");
 });
 
 test("the five sections appear in the fixed order", () => {
