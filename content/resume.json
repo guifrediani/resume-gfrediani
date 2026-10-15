@@ -1,0 +1,74 @@
+{
+  "profile": {
+    "name": "Guilherme Frediani",
+    "description": "Product professional with 3+ years of experience, looking to transition into the gaming industry.",
+    "location": "Valinhos, São Paulo, Brazil",
+    "email": "guifrediani7@gmail.com",
+    "phone": "+55 19 99525-0123",
+    "x": {
+      "handle": "@gfredsmth",
+      "url": "https://x.com/gfredsmth"
+    }
+  },
+  "professionalExperience": [
+    {
+      "title": "Mid-level Product Owner",
+      "description": "Responsible for keeping the backlog up to date, establishing acceptance criteria, understanding constraints and risks, deciding what should be done next, and keeping stakeholders aligned.\nManaged the development of an AI assistant for the financial market, from discovery all the way to post-launch activities.\nI also take part in preparing proposals for new projects.",
+      "startDate": "2025-04",
+      "endDate": null
+    },
+    {
+      "title": "Junior Product Manager",
+      "description": "Responsible for managing global Android software releases with Motorola: more than 150 releases affecting 5M+ users. Fixes were related to carrier requests and field issues.",
+      "startDate": "2023-06",
+      "endDate": "2025-04"
+    },
+    {
+      "title": "Product Manager Intern",
+      "description": "Responsible for helping the PM team with manual tasks in Jira and Salesforce while learning the end-to-end process. By the end of the internship, I was able to manage a new software release by myself.",
+      "startDate": "2022-07",
+      "endDate": "2023-06"
+    }
+  ],
+  "academicExperience": [
+    {
+      "title": "Postgraduate Degree in Project Management - FGV",
+      "startDate": "2023-11",
+      "endDate": "2024-11"
+    },
+    {
+      "title": "Bachelor's Degree in Software Engineering - PUC-Campinas",
+      "startDate": "2019-02",
+      "endDate": "2023-06"
+    }
+  ],
+  "certifications": [
+    {
+      "title": "Certified Scrum Product Owner - CSPO®",
+      "date": "2025-08"
+    },
+    {
+      "title": "Project Management Professional - PMP®",
+      "date": "2025-04"
+    }
+  ],
+  "tools": [
+    { "name": "Jira" },
+    { "name": "Power BI" },
+    { "name": "ClickUp" },
+    { "name": "League of Legends" },
+    { "name": "Teamfight Tactics" },
+    { "name": "Riot's MMO" },
+    { "name": "World of Warcraft" }
+  ],
+  "languages": [
+    {
+      "name": "Portuguese",
+      "level": "Native"
+    },
+    {
+      "name": "English",
+      "level": "Fluent"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "version": "0.2",
+  "language": "en-US",
+  "words": ["Guilherme", "Frediani", "Valinhos", "gfredsmth", "CSPO", "Teamfight"],
+  "ignorePaths": ["node_modules/**"]
+}

@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://resume.guilherme.local/schemas/resume-content.schema.json",
+  "title": "Resume content",
+  "description": "Single content source for the one-page resume website. Edited only by the owner.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profile",
+    "professionalExperience",
+    "academicExperience",
+    "certifications",
+    "tools",
+    "languages"
+  ],
+  "properties": {
+    "profile": { "$ref": "#/$defs/profile" },
+    "professionalExperience": {
+      "type": "array",
+      "description": "Jobs and roles, any order; rendered newest start date first.",
+      "items": { "$ref": "#/$defs/experienceEntry" }
+    },
+    "academicExperience": {
+      "type": "array",
+      "description": "Degrees and courses, any order; rendered newest start date first.",
+      "items": { "$ref": "#/$defs/experienceEntry" }
+    },
+    "certifications": {
+      "type": "array",
+      "description": "Rendered in file order.",
+      "items": { "$ref": "#/$defs/certification" }
+    },
+    "tools": {
+      "type": "array",
+      "description": "Tools the owner has experience with. Rendered in file order as tags.",
+      "items": { "$ref": "#/$defs/tool" }
+    },
+    "languages": {
+      "type": "array",
+      "description": "Rendered in file order.",
+      "items": { "$ref": "#/$defs/language" }
+    }
+  },
+  "$defs": {
+    "yearMonth": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
+      "description": "Month precision, for example 2023-03. Displayed as Mar 2023."
+    },
+    "nonBlankString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "description"],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonBlankString",
+          "description": "Full name. Rendered as the page heading and title."
+        },
+        "description": {
+          "$ref": "#/$defs/nonBlankString",
+          "description": "Short paragraph about the owner. Line breaks become paragraph breaks."
+        },
+        "location": {
+          "type": "string",
+          "description": "City and country as it should read. Blank omits the detail."
+        },
+        "email": {
+          "type": "string",
+          "description": "Address. Rendered as a mailto link. Blank omits the detail.",
+          "anyOf": [
+            { "const": "" },
+            { "pattern": "^[^@\\s]+@[^@\\s]+$" }
+          ]
+        },
+        "phone": {
+          "type": "string",
+          "description": "Display form, for example +55 11 91234-5678. Rendered as a tel link. Blank omits the detail."
+        },
+        "x": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["handle", "url"],
+          "properties": {
+            "handle": {
+              "$ref": "#/$defs/nonBlankString",
+              "description": "Display handle, for example @guilherme. A missing leading @ is added."
+            },
+            "url": {
+              "type": "string",
+              "pattern": "^https://(x\\.com|twitter\\.com)/[^/\\s]+/?$",
+              "description": "Personal profile URL. Opens in a new tab."
+            }
+          }
+        }
+      }
+    },
+    "experienceEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "description", "startDate"],
+      "properties": {
+        "title": { "$ref": "#/$defs/nonBlankString" },
+        "description": { "$ref": "#/$defs/nonBlankString" },
+        "startDate": { "$ref": "#/$defs/yearMonth" },
+        "endDate": {
+          "description": "Omit or set to null for an ongoing entry; renders as Present.",
+          "anyOf": [
+            { "$ref": "#/$defs/yearMonth" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "certification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "date"],
+      "properties": {
+        "title": { "$ref": "#/$defs/nonBlankString" },
+        "date": {
+          "$ref": "#/$defs/yearMonth",
+          "description": "Month the certification was obtained."
+        }
+      }
+    },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonBlankString",
+          "description": "Tool, platform, or technology name, for example Figma."
+        }
+      }
+    },
+    "language": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "level"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonBlankString" },
+        "level": {
+          "$ref": "#/$defs/nonBlankString",
+          "description": "Free text, for example Native, Fluent, Intermediate, or a CEFR grade such as C1."
+        }
+      }
+    }
+  }
+}
