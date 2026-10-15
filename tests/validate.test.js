@@ -156,7 +156,7 @@ test("missing icon file warns with the icons path and reports status", () => {
 
 test("icon status is true when files exist", () => {
   const { content } = run(baseContent());
-  assert.deepEqual(content.iconStatus, { location: true, email: true, phone: true, x: true });
+  assert.deepEqual(content.iconStatus, { location: true, email: true, phone: true, linkedin: true, x: true });
 });
 
 test("a missing icon does not warn when its contact detail is absent", () => {
@@ -296,4 +296,14 @@ test("company is optional but must be a string when present", () => {
   assert.equal(find(run(content).warnings, "professionalExperience[0].company"), undefined);
   content.professionalExperience[0].company = 42;
   assert.ok(find(run(content).warnings, "professionalExperience[0].company"));
+});
+
+test("LinkedIn is optional but must be a profile URL when present", () => {
+  const content = baseContent();
+  delete content.profile.linkedin;
+  assert.equal(find(run(content).warnings, "profile.linkedin"), undefined);
+  content.profile.linkedin = "https://br.linkedin.com/in/someone";
+  assert.equal(find(run(content).warnings, "profile.linkedin"), undefined);
+  content.profile.linkedin = "linkedin.com/someone";
+  assert.ok(find(run(content).warnings, "profile.linkedin"));
 });

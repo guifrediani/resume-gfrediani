@@ -13,7 +13,7 @@ import {
 
 const template = readFileSync(new URL("../src/template.html", import.meta.url), "utf8");
 
-const allIcons = { location: true, email: true, phone: true, x: true };
+const allIcons = { location: true, email: true, phone: true, linkedin: true, x: true };
 
 const fixture = () => ({
   profile: {
@@ -22,6 +22,7 @@ const fixture = () => ({
     location: "City, Country",
     email: "test@example.com",
     phone: "+55 (11) 91234-5678",
+    linkedin: "https://www.linkedin.com/in/test-person/",
     x: { handle: "test", url: "https://x.com/test" },
   },
   iconStatus: allIcons,
@@ -88,10 +89,11 @@ test("about section renders h1, paragraphs, and contacts in order with icons", (
     'contact-list__item--location',
     'contact-list__item--email',
     'contact-list__item--phone',
+    'contact-list__item--linkedin',
     'contact-list__item--x',
   ]);
   assert.deepEqual([...positions].sort((a, b) => a - b), positions);
-  for (const file of ["location.png", "e-mail.png", "phone.png", "x.png"]) {
+  for (const file of ["location.png", "e-mail.png", "phone.png", "linkedin.png", "x.png"]) {
     assert.ok(html.includes(`<img class="contact-list__icon" src="icons/${file}" alt="" width="24" height="24">`), file);
   }
 });
@@ -223,4 +225,12 @@ test("professional entries show the company under the title and hide it when bla
   assert.ok(html.includes('<p class="entry__company">Acme &lt;Games&gt;</p>'));
   assert.ok(html.indexOf("Owner</h3>") < html.indexOf("entry__company"));
   assert.equal((html.match(/entry__company/g) ?? []).length, 1);
+});
+
+test("LinkedIn opens in a new tab with a short label and is omitted when invalid", () => {
+  const html = renderAbout(fixture().profile, allIcons);
+  assert.ok(html.includes('<a href="https://www.linkedin.com/in/test-person/" target="_blank" rel="noopener noreferrer">linkedin.com/in/test-person<span class="external-mark" aria-hidden="true">↗</span>'));
+  const profile = fixture().profile;
+  profile.linkedin = "https://example.com/in/test";
+  assert.ok(!renderAbout(profile, allIcons).includes("contact-list__item--linkedin"));
 });

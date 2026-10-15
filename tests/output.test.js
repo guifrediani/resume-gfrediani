@@ -25,7 +25,7 @@ test("build prints the summary line and copies assets", () => {
   assert.match(stdout, /^Built .*index\.html \(0 errors, \d+ warnings\)\s*$/);
   assert.ok(existsSync(join(out, "styles.css")));
   assert.ok(existsSync(join(out, "enhance.js")));
-  for (const file of ["location.png", "e-mail.png", "phone.png", "x.png"]) {
+  for (const file of ["location.png", "e-mail.png", "phone.png", "linkedin.png", "x.png"]) {
     assert.ok(existsSync(join(out, "icons", file)), file);
   }
 });
@@ -90,6 +90,7 @@ test("each contact detail in the sample content has its icon image", () => {
     [content.profile.location, "location.png"],
     [content.profile.email, "e-mail.png"],
     [content.profile.phone, "phone.png"],
+    [content.profile.linkedin, "linkedin.png"],
     [content.profile.x?.url, "x.png"],
   ];
   for (const [value, file] of expected) {

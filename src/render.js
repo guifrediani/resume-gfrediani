@@ -9,6 +9,8 @@ import {
   sortByStartDate,
   normalizeTel,
   ensureHandle,
+  LINKEDIN_URL,
+  linkedinLabel,
 } from "./format.js";
 
 const EMPTY_MESSAGE = '<p class="copy copy--muted entry-list--empty">No entries yet.</p>';
@@ -87,6 +89,14 @@ export function renderAbout(profile, iconStatus = {}) {
     items.push(`<li class="contact-list__item contact-list__item--phone">
         ${icon("phone", "phone.png", iconStatus)}
         <a href="tel:${escapeHtml(normalizeTel(phone))}">${phoneText}</a>
+      </li>`);
+  }
+
+  if (!isBlank(profile.linkedin) && LINKEDIN_URL.test(profile.linkedin.trim())) {
+    const url = profile.linkedin.trim();
+    items.push(`<li class="contact-list__item contact-list__item--linkedin">
+        ${icon("linkedin", "linkedin.png", iconStatus)}
+        <a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(linkedinLabel(url))}<span class="external-mark" aria-hidden="true">↗</span><span class="visually-hidden">(opens in a new tab)</span></a>
       </li>`);
   }
 

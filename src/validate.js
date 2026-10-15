@@ -4,7 +4,7 @@
 
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { isYearMonth } from "./format.js";
+import { isYearMonth, LINKEDIN_URL } from "./format.js";
 
 const LIST_KEYS = ["professionalExperience", "academicExperience", "certifications", "tools", "languages"];
 
@@ -12,6 +12,7 @@ const CONTACT_ICONS = {
   location: "location.png",
   email: "e-mail.png",
   phone: "phone.png",
+  linkedin: "linkedin.png",
   x: "x.png",
 };
 
@@ -107,6 +108,13 @@ function validateProfile(profile, warn) {
     warn("profile.phone", "missing; the phone contact detail will be omitted.");
   }
 
+  // LinkedIn is optional: missing or blank hides it without a warning.
+  if (profile.linkedin !== undefined && profile.linkedin !== null && profile.linkedin !== "") {
+    if (typeof profile.linkedin !== "string" || !LINKEDIN_URL.test(profile.linkedin.trim())) {
+      warn("profile.linkedin", `expected an https://www.linkedin.com/in/ profile URL, found ${JSON.stringify(profile.linkedin)}; the LinkedIn contact detail will be omitted.`);
+    }
+  }
+
   const x = profile.x;
   if (x === undefined || x === null || x === "") {
     warn("profile.x", "missing; the X contact detail will be omitted.");
@@ -129,9 +137,10 @@ function checkIcons(profile, iconsDir, warn) {
     location: !isBlank(profile.location),
     email: !isBlank(profile.email),
     phone: !isBlank(profile.phone),
+    linkedin: !isBlank(profile.linkedin),
     x: profile.x && typeof profile.x === "object" && !isBlank(profile.x.url),
   };
-  const labels = { location: "location", email: "e-mail", phone: "phone", x: "X" };
+  const labels = { location: "location", email: "e-mail", phone: "phone", linkedin: "LinkedIn", x: "X" };
   for (const [kind, file] of Object.entries(CONTACT_ICONS)) {
     const exists = existsSync(join(iconsDir, file));
     status[kind] = exists;

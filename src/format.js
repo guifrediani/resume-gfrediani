@@ -70,3 +70,12 @@ export function paragraphs(text) {
     .map((line) => `<p>${escapeHtml(line)}</p>`)
     .join("\n");
 }
+
+/** A public LinkedIn profile URL, e.g. https://www.linkedin.com/in/name/ (country subdomains allowed). */
+export const LINKEDIN_URL = /^https:\/\/([a-z]{2,3}\.)?linkedin\.com\/in\/[^/\s?#]+\/?$/;
+
+/** Short visible label for a LinkedIn profile URL: "linkedin.com/in/name". */
+export function linkedinLabel(url) {
+  const slug = url.trim().replace(/\/$/, "").split("/").pop();
+  return `linkedin.com/in/${slug}`;
+}
