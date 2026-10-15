@@ -2,5 +2,6 @@
   "version": "0.2",
   "language": "en-US",
   "words": ["Guilherme", "Frediani", "Valinhos", "gfredsmth", "CSPO", "Teamfight", "Instituto", "Pesquisas", "Eldorado"],
+  "ignoreRegExpList": ["/linkedin\\.com\\/in\\/[^<\\s\"]+/g"],
   "ignorePaths": ["node_modules/**"]
 }
