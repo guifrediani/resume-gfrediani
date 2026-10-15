@@ -34,10 +34,10 @@ export function renderPage(content, template) {
 }
 
 /** The sections in their fixed order. Short sections are paired so they share a row on desktop. */
-export function renderSections(content, now = new Date()) {
+export function renderSections(content) {
   const half = { half: true };
   return [
-    renderAbout(content.profile ?? {}, content.iconStatus ?? {}, computeStats(content, now)),
+    renderAbout(content.profile ?? {}, content.iconStatus ?? {}),
     renderExperienceSection("professional-experience", "Professional Experience", content.professionalExperience ?? []),
     pair(
       renderExperienceSection("academic-experience", "Academic Experience", content.academicExperience ?? [], half),
@@ -57,31 +57,12 @@ function sectionOpen(id, half) {
   return `<section id="${id}" class="${classes}" aria-labelledby="${id}-heading">`;
 }
 
-/** Headline numbers for the About section, derived from the content so they never go stale. */
-export function computeStats(content, now = new Date()) {
-  const stats = [];
-  const starts = (content.professionalExperience ?? [])
-    .filter((entry) => isObject(entry) && isYearMonth(entry.startDate))
-    .map((entry) => entry.startDate)
-    .sort();
-  if (starts.length > 0) {
-    const [year, month] = starts[0].split("-").map(Number);
-    const years = Math.floor((now.getUTCFullYear() * 12 + now.getUTCMonth() - (year * 12 + month - 1)) / 12);
-    if (years >= 1) stats.push({ value: `${years}+`, label: years === 1 ? "Year of experience" : "Years of experience" });
-  }
-  const certifications = (content.certifications ?? []).filter(isObject).length;
-  if (certifications > 0) stats.push({ value: String(certifications), label: certifications === 1 ? "Certification" : "Certifications" });
-  const languages = (content.languages ?? []).filter(isObject).length;
-  if (languages > 0) stats.push({ value: String(languages), label: languages === 1 ? "Language" : "Languages" });
-  return stats;
-}
-
 function icon(kind, file, iconStatus) {
   if (iconStatus[kind] === false) return "";
   return `<img class="contact-list__icon" src="icons/${file}" alt="" width="24" height="24">`;
 }
 
-export function renderAbout(profile, iconStatus = {}, stats = []) {
+export function renderAbout(profile, iconStatus = {}) {
   const items = [];
 
   if (!isBlank(profile.location)) {
@@ -120,11 +101,6 @@ export function renderAbout(profile, iconStatus = {}, stats = []) {
 
   const name = isBlank(profile.name) ? "Your Name" : profile.name.trim();
   const contacts = items.length > 0 ? `<ul class="contact-list">\n      ${items.join("\n      ")}\n    </ul>` : "";
-  const statList = stats.length > 0
-    ? `<ul class="stat-list">\n        ${stats
-        .map((stat) => `<li class="stat"><span class="stat__value">${escapeHtml(stat.value)}</span> <span class="stat__label">${escapeHtml(stat.label)}</span></li>`)
-        .join("\n        ")}\n      </ul>`
-    : "";
 
   return `<section id="about" class="section section--about content-gutter" aria-labelledby="about-heading">
     <div class="section__inner">
@@ -136,7 +112,6 @@ export function renderAbout(profile, iconStatus = {}, stats = []) {
         </div>
         <div class="about__side">
           ${contacts}
-          ${statList}
         </div>
       </div>
     </div>

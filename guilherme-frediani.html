@@ -444,7 +444,7 @@ main {
   margin-bottom: var(--space-4);
 }
 
-/* Description on the left, contacts and stats on the right: the hero fills the
+/* Description on the left, contacts on the right: the hero fills the
    row instead of leaving the right half of the screen empty. */
 .about__grid {
   display: grid;
@@ -475,39 +475,6 @@ main {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-}
-
-/* Stat blocks (design-system.md section 7.8). */
-.stat-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-  gap: var(--space-3);
-}
-
-.stat {
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  background-color: var(--overlay-card);
-  font-size: 0.6875rem;
-  line-height: 1.3;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--color-text-subtle);
-}
-
-.stat__value {
-  display: block;
-  margin-bottom: var(--space-1);
-  font-family: var(--font-display);
-  font-size: 2.5rem;
-  font-weight: 900;
-  line-height: 1;
-  color: var(--color-text);
-}
-
-@media (min-width: 960px) {
-  .stat { padding: var(--space-5); font-size: 0.75rem; }
-  .stat__value { font-size: 3rem; }
 }
 
 .contact-list__item {
@@ -763,8 +730,7 @@ main {
   .section--about__eyebrow,
   .section--about .heading--display,
   .section--about__description,
-  .contact-list,
-  .stat-list {
+  .contact-list {
     opacity: 0;
     animation: reveal-up var(--dur-reveal) var(--ease) forwards;
   }
@@ -773,7 +739,6 @@ main {
   .section--about .heading--display { animation-delay: 0.8s; }
   .section--about__description { animation-delay: 1.2s; }
   .contact-list { animation-delay: 1.4s; }
-  .stat-list { animation-delay: 1.6s; }
 }
 
 /* --------------------------------------------------------------------------
@@ -944,7 +909,20 @@ main {
   border: 2px solid var(--xp-color);
   background-color: var(--color-bg-black);
   box-shadow: 0 0 10px var(--xp-color);
-  transition: border-color 0.6s var(--ease), box-shadow 0.6s var(--ease);
+  opacity: 0;
+  scale: 0;
+  transition:
+    border-color 0.6s var(--ease),
+    box-shadow 0.6s var(--ease),
+    opacity var(--dur-slow) var(--ease),
+    scale var(--dur-slow) var(--ease);
+}
+
+/* The marker only exists while the reader is on the way: at the top the START
+   cap stands in for it, at the bottom the VICTORY cap takes over. */
+.xp-bar.is-started:not(.is-complete) .xp-bar__marker {
+  opacity: 1;
+  scale: 1;
 }
 
 .xp-bar__marker::before {
@@ -1047,10 +1025,6 @@ main {
     100% { transform: rotate(45deg) scale(1); }
   }
 
-  @keyframes xp-drop {
-    from { opacity: 0; top: -40px; }
-  }
-
   @keyframes xp-pulse {
     to { transform: translateY(calc(100vh + 60px)); }
   }
@@ -1072,7 +1046,7 @@ main {
   }
 
   /* Boot sequence once the hero has landed: the track powers up top to bottom,
-     the caps and checkpoints pop in one after another, then the marker drops. */
+     the caps and checkpoints pop in one after another. */
   .xp-bar__track {
     transform-origin: top;
     animation: xp-boot 0.9s var(--ease-dramatic) 1.4s both;
@@ -1087,10 +1061,6 @@ main {
 
   .xp-bar__checkpoint.is-reached {
     animation: xp-pop 0.5s var(--ease) both;
-  }
-
-  .xp-bar__marker {
-    animation: xp-drop 0.6s var(--ease) 2.3s both;
   }
 
   .xp-bar__marker::before {
@@ -1203,8 +1173,7 @@ main {
   .section--about__eyebrow,
   .section--about .heading--display,
   .section--about__description,
-  .contact-list,
-  .stat-list {
+  .contact-list {
     opacity: 1;
     animation: none;
   }
@@ -1258,11 +1227,6 @@ main {
         <a href="https://x.com/gfredsmth" target="_blank" rel="noopener noreferrer">@gfredsmth<span class="external-mark" aria-hidden="true">↗</span><span class="visually-hidden">(opens in a new tab)</span></a>
       </li>
     </ul>
-          <ul class="stat-list">
-        <li class="stat"><span class="stat__value">4+</span> <span class="stat__label">Years of experience</span></li>
-        <li class="stat"><span class="stat__value">2</span> <span class="stat__label">Certifications</span></li>
-        <li class="stat"><span class="stat__value">2</span> <span class="stat__label">Languages</span></li>
-      </ul>
         </div>
       </div>
     </div>
