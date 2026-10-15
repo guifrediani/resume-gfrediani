@@ -24,6 +24,7 @@ before(() => {
 test("build prints the summary line and copies assets", () => {
   assert.match(stdout, /^Built .*index\.html \(0 errors, \d+ warnings\)\s*$/);
   assert.ok(existsSync(join(out, "styles.css")));
+  assert.ok(existsSync(join(out, "enhance.js")));
   for (const file of ["location.png", "e-mail.png", "phone.png", "x.png"]) {
     assert.ok(existsSync(join(out, "icons", file)), file);
   }
@@ -34,11 +35,13 @@ test("exactly one HTML file is produced", () => {
   assert.deepEqual(htmlFiles, ["index.html"]);
 });
 
-test("document is English-US and has no script or input surface", () => {
+test("document is English-US, loads only its own enhancement script, and has no input surface", () => {
   assert.ok(html.includes('<html lang="en-US">'));
-  for (const tag of ["<script", "<form", "<input", "<textarea", "<button"]) {
+  for (const tag of ["<form", "<input", "<textarea", "<button"]) {
     assert.ok(!html.toLowerCase().includes(tag), `${tag} must not appear`);
   }
+  const sources = [...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(sources, ["enhance.js"]);
 });
 
 test("the five sections appear in the fixed order", () => {

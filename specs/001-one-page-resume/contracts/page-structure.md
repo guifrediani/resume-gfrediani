@@ -13,7 +13,9 @@ contain, not how the build produces it.
 - `<title>` is `<profile.name> - Resume`.
 - `<meta name="description">` is the first 160 characters of `profile.description`.
 - `<meta name="viewport" content="width=device-width, initial-scale=1">`.
-- No `<script>` elements. No `<form>`, `<input>`, `<textarea>`, `<button type="submit">`,
+- Scripts are limited to progressive enhancement: one inline line in `<head>` that adds
+  `class="js"` to `<html>`, and `enhance.js` (scroll reveal and the XP reading-progress bar).
+  Every piece of content is visible and usable without JavaScript. No `<form>`, `<input>`, `<textarea>`, `<button type="submit">`,
   or any other element that accepts visitor input.
 - A skip link is the first focusable element: `<a class="skip-link" href="#main">Skip to main content</a>`.
 
@@ -220,7 +222,7 @@ Inside `@media print`:
 `tests/output.test.js` reads `dist/index.html` and asserts:
 
 1. Only one `.html` file exists in `dist/`.
-2. `<html lang="en-US">` and no `<script>` or `<form>` elements.
+2. `<html lang="en-US">`, no `<form>` elements, and `enhance.js` as the only script source.
 3. The six section ids exist in the fixed order.
 4. Every nav `href` beginning with `#` matches an existing `id`.
 5. Every `<a href>` that does not begin with `#`, `mailto:`, or `tel:` has

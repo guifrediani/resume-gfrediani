@@ -39,8 +39,10 @@
   /* Space */
   --space-2: 8px; --space-4: 16px; --space-5: 20px; --space-6: 24px; --space-8: 30px;
   --space-10: 40px; --space-12: 50px; --space-15: 60px; --space-20: 80px; --space-25: 100px;
+  --space-1: 4px; --space-3: 12px;
   --gutter: 20px; --gutter-md: 40px; --gutter-lg: 80px;
-  --container: 1440px; --container-narrow: 953.333px; --container-text: 466.667px;
+  --container: 1440px; --container-wide: 1196.667px; --container-narrow: 953.333px; --container-text: 466.667px;
+  --measure: 72ch;
 
   /* Shape */
   --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-xl: 24px; --radius-pill: 32px;
@@ -191,24 +193,27 @@ ul, ol {
   line-height: 1.3;
 }
 
+/* Section headings stay heavy but smaller than the design system's 5rem so a
+   heading does not cost a whole screen row on a resume this short. */
 @media (min-width: 550px) {
   .heading--display { font-size: 5rem; line-height: 0.88; }
-  .heading--2 { font-size: 3.75rem; line-height: 1.07; }
+  .heading--2 { font-size: 3rem; line-height: 1.07; }
   .heading--4 { font-size: 1.75rem; line-height: 1.25; }
   .heading--5 { font-size: 1.375rem; }
 }
 
 @media (min-width: 960px) {
   .heading--display { font-size: 7.5rem; line-height: 0.85; }
-  .heading--2 { font-size: 5rem; line-height: 1.07; }
-  .heading--4 { font-size: 2rem; line-height: 1.23; }
-  .heading--5 { font-size: 1.5rem; }
+  .heading--2 { font-size: 3.5rem; line-height: 1.05; }
+  .heading--4 { font-size: 1.75rem; line-height: 1.23; }
+  .heading--5 { font-size: 1.375rem; }
 }
 
+/* Text runs to a comfortable reading measure instead of the 466px column. */
 .copy {
   font-size: 1rem;
   line-height: var(--lh-body);
-  max-width: var(--container-text);
+  max-width: var(--measure);
 }
 
 .copy p + p {
@@ -313,15 +318,35 @@ main {
 
 @media (min-width: 960px) {
   main {
-    row-gap: var(--space-25);
-    padding-top: calc(var(--header-height) + var(--space-20));
-    padding-bottom: var(--space-25);
+    row-gap: var(--space-20);
+    padding-top: calc(var(--header-height) + var(--space-15));
+    padding-bottom: var(--space-20);
   }
 }
 
 .section__inner {
-  max-width: var(--container-narrow);
+  max-width: var(--container-wide);
   margin: 0 auto;
+}
+
+/* Two short sections share one row on desktop instead of each leaving half the width empty. */
+.section-pair {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-12);
+}
+
+@media (min-width: 960px) {
+  .section-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-20);
+    width: 100%;
+    max-width: calc(var(--container-wide) + 2 * var(--gutter-lg));
+    margin: 0 auto;
+  }
+
+  .section--half .heading--2 { font-size: 2.75rem; }
 }
 
 .section__header {
@@ -332,7 +357,7 @@ main {
 }
 
 @media (min-width: 960px) {
-  .section__header { margin-bottom: var(--space-15); }
+  .section__header { margin-bottom: var(--space-10); }
 }
 
 /* --------------------------------------------------------------------------
@@ -350,7 +375,7 @@ main {
 
 .site-header__inner {
   height: var(--header-height);
-  max-width: var(--container);
+  max-width: calc(var(--container-wide) + 2 * var(--gutter-lg));
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -419,8 +444,30 @@ main {
   margin-bottom: var(--space-4);
 }
 
-.section--about__description {
+/* Description on the left, contacts and stats on the right: the hero fills the
+   row instead of leaving the right half of the screen empty. */
+.about__grid {
+  display: grid;
+  gap: var(--space-10);
   margin-top: var(--space-8);
+}
+
+.about__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+@media (min-width: 960px) {
+  .about__grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--space-15);
+    align-items: start;
+    margin-top: var(--space-12);
+  }
+}
+
+.section--about__description {
   color: var(--color-text-subtle);
 }
 
@@ -428,7 +475,39 @@ main {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  margin-top: var(--space-10);
+}
+
+/* Stat blocks (design-system.md section 7.8). */
+.stat-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: var(--space-3);
+}
+
+.stat {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--overlay-card);
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+.stat__value {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+@media (min-width: 960px) {
+  .stat { padding: var(--space-5); font-size: 0.75rem; }
+  .stat__value { font-size: 3rem; }
 }
 
 .contact-list__item {
@@ -461,7 +540,7 @@ main {
   color: var(--color-text-subtle);
 }
 
-@media (min-width: 550px) {
+@media (min-width: 550px) and (max-width: 959px) {
   .contact-list {
     flex-direction: row;
     flex-wrap: wrap;
@@ -513,6 +592,36 @@ main {
 
 .entry__description {
   margin-top: var(--space-2);
+}
+
+/* Full-width experience on desktop: dates in a narrow left column, title and
+   description across the rest, so descriptions use the row instead of a strip. */
+@media (min-width: 960px) {
+  .section:not(.section--half) .entry-list { gap: 0; }
+
+  .section:not(.section--half) .entry {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    grid-template-areas: "dates title" "dates description";
+    column-gap: var(--space-10);
+    row-gap: var(--space-2);
+    padding: var(--space-8) 0;
+    border-left: 0;
+    border-top: 1px solid var(--color-surface-alt);
+  }
+
+  .section:not(.section--half) .entry--current {
+    border-top: 2px solid var(--color-accent);
+  }
+
+  .section:not(.section--half) .entry__title { grid-area: title; }
+  .section:not(.section--half) .entry__dates { grid-area: dates; padding-top: 0.6em; font-size: 0.75rem; }
+  .section:not(.section--half) .entry__description {
+    grid-area: description;
+    margin-top: 0;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
 }
 
 .entry-list--compact {
@@ -606,7 +715,7 @@ main {
   justify-content: space-between;
   gap: var(--space-4);
   flex-wrap: wrap;
-  max-width: var(--container);
+  max-width: calc(var(--container-wide) + 2 * var(--gutter-lg));
   margin: 0 auto;
   padding-top: var(--space-15);
   padding-bottom: var(--space-10);
@@ -654,7 +763,8 @@ main {
   .section--about__eyebrow,
   .section--about .heading--display,
   .section--about__description,
-  .contact-list {
+  .contact-list,
+  .stat-list {
     opacity: 0;
     animation: reveal-up var(--dur-reveal) var(--ease) forwards;
   }
@@ -663,6 +773,341 @@ main {
   .section--about .heading--display { animation-delay: 0.8s; }
   .section--about__description { animation-delay: 1.2s; }
   .contact-list { animation-delay: 1.4s; }
+  .stat-list { animation-delay: 1.6s; }
+}
+
+/* --------------------------------------------------------------------------
+   11b. Streaming reveal on scroll (design-system.md section 6.2)
+   Only active when enhance.js has run (html.js) and motion is allowed, so the
+   page is fully visible without JavaScript. enhance.js adds .is-visible.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The mask sits on the heading, not on the observed header: a fully clipped
+     target would never count as intersecting. */
+  .js .section:not(.section--about) .section__header > * {
+    opacity: 0;
+    clip-path: polygon(99.999% 0, 100% 0, 100% 100%, 99.999% 100%);
+    transition:
+      clip-path var(--dur-reveal) var(--ease-dramatic) var(--reveal-delay, 0s),
+      opacity var(--dur-slow) var(--ease) var(--reveal-delay, 0s);
+  }
+
+  .js .section:not(.section--about) .section__header.is-visible > * {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .js .entry,
+  .js .tool,
+  .js .language {
+    opacity: 0;
+    transform: translateY(60px);
+    transition:
+      opacity 0.8s var(--ease) var(--reveal-delay, 0s),
+      transform 0.8s var(--ease) var(--reveal-delay, 0s);
+  }
+
+  .js .entry.is-visible,
+  .js .tool.is-visible,
+  .js .language.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The description streams in just after its title. */
+  .js .entry__description {
+    opacity: 0;
+    transition: opacity 0.8s var(--ease) calc(var(--reveal-delay, 0s) + 0.3s);
+  }
+
+  .js .entry.is-visible .entry__description {
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11c. XP bar: reading progress on the right edge, drawn like a game HUD.
+   A diamond marker travels down a track from START to VICTORY, each section
+   is a checkpoint that "levels up" when reached. enhance.js sets --p (0..1),
+   positions the checkpoints and toggles the state classes.
+   -------------------------------------------------------------------------- */
+
+.xp-bar {
+  --p: 0;
+  --xp-color: var(--color-accent);
+  position: fixed;
+  z-index: 40;
+  top: calc(var(--header-height) + var(--space-4));
+  bottom: var(--space-4);
+  right: 2px;
+  width: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.xp-bar[hidden] {
+  display: none;
+}
+
+.xp-bar.is-complete {
+  --xp-color: var(--color-gold);
+}
+
+.xp-bar__cap {
+  position: relative;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  transform: rotate(45deg);
+  border: 2px solid var(--color-border);
+  background-color: var(--color-bg);
+  transition: background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease), transform 0.6s var(--ease-dramatic);
+}
+
+.xp-bar__cap--start {
+  border-color: var(--color-accent);
+}
+
+.xp-bar.is-started .xp-bar__cap--start {
+  background-color: var(--color-accent);
+}
+
+.xp-bar.is-complete .xp-bar__cap--end {
+  border-color: var(--color-gold);
+  background-color: var(--color-gold);
+  transform: rotate(405deg) scale(1.5);
+}
+
+.xp-bar__track {
+  position: relative;
+  flex: 1;
+  width: 3px;
+  margin: var(--space-2) 0;
+  background-color: var(--color-surface-alt);
+}
+
+.xp-bar__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(var(--p) * 100%);
+  overflow: hidden;
+  background-color: var(--xp-color);
+  box-shadow: 0 0 8px var(--xp-color);
+  transition: background-color 0.6s var(--ease), box-shadow 0.6s var(--ease);
+}
+
+/* Energy pulse running down the filled part of the bar. */
+.xp-bar__fill::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  top: -60px;
+  background: linear-gradient(to bottom, transparent, rgba(249, 249, 249, 0.85), transparent);
+}
+
+.xp-bar__checkpoints {
+  position: absolute;
+  inset: 0;
+}
+
+.xp-bar__checkpoint {
+  position: absolute;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  transform: rotate(45deg);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  transition: background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
+}
+
+.xp-bar__checkpoint.is-reached {
+  background-color: var(--xp-color);
+  border-color: var(--xp-color);
+}
+
+.xp-bar__marker {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--p) * 100%);
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 2px solid var(--xp-color);
+  background-color: var(--color-bg-black);
+  box-shadow: 0 0 10px var(--xp-color);
+  transition: border-color 0.6s var(--ease), box-shadow 0.6s var(--ease);
+}
+
+.xp-bar__marker::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background-color: var(--xp-color);
+  transition: background-color 0.6s var(--ease);
+}
+
+/* HUD labels: level and percent beside the marker, START and VICTORY at the ends.
+   Shown only where the side gutter is wide enough not to cover the text. */
+.xp-bar__hud,
+.xp-bar__label {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .xp-bar {
+    right: var(--space-6);
+    width: 24px;
+  }
+
+  .xp-bar__cap { width: 12px; height: 12px; }
+  .xp-bar__track { width: 4px; }
+  .xp-bar__checkpoint { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
+  .xp-bar__marker { width: 20px; height: 20px; }
+  .xp-bar__marker::before { inset: 4px; }
+
+  .xp-bar__hud,
+  .xp-bar__label {
+    display: flex;
+    position: absolute;
+    right: calc(100% + var(--space-3));
+    align-items: center;
+    gap: var(--space-2);
+    padding: 3px 14px;
+    clip-path: var(--clip-parallelogram);
+    background-color: var(--color-bg-deep);
+    font-size: 0.625rem;
+    line-height: 1.6;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-text);
+  }
+
+  .xp-bar__hud {
+    top: calc(var(--p) * 100%);
+    transform: translateY(-50%);
+  }
+
+  .xp-bar__level {
+    padding: 0 6px;
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    transition: background-color 0.6s var(--ease), color 0.6s var(--ease);
+  }
+
+  .xp-bar.is-complete .xp-bar__level {
+    background-color: var(--color-gold);
+    color: var(--color-bg-black);
+  }
+
+  .xp-bar__value {
+    min-width: 3.2em;
+    text-align: right;
+    color: var(--color-text-subtle);
+  }
+
+  .xp-bar__label--start { top: -4px; }
+  .xp-bar__label--end { bottom: -4px; color: var(--color-bg-black); background-color: var(--color-gold); }
+
+  /* START is shown until the player moves; VICTORY appears at the end. The HUD
+     hides at both ends so it never covers the end labels. */
+  .xp-bar.is-started .xp-bar__label--start,
+  .xp-bar:not(.is-complete) .xp-bar__label--end,
+  .xp-bar:not(.is-started) .xp-bar__hud,
+  .xp-bar.is-complete .xp-bar__hud {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .xp-bar__label,
+  .xp-bar__hud {
+    transition: opacity var(--dur-slow) var(--ease), visibility var(--dur-slow);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes xp-boot {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+  }
+
+  @keyframes xp-pop {
+    0% { transform: rotate(45deg) scale(0); }
+    70% { transform: rotate(45deg) scale(1.6); }
+    100% { transform: rotate(45deg) scale(1); }
+  }
+
+  @keyframes xp-drop {
+    from { opacity: 0; top: -40px; }
+  }
+
+  @keyframes xp-pulse {
+    to { transform: translateY(calc(100vh + 60px)); }
+  }
+
+  @keyframes xp-core {
+    from { opacity: 1; }
+    to { opacity: 0.45; }
+  }
+
+  @keyframes xp-victory {
+    0% { transform: rotate(45deg) scale(1); }
+    50% { transform: rotate(225deg) scale(2.2); }
+    100% { transform: rotate(405deg) scale(1.5); }
+  }
+
+  @keyframes mask-reveal-from-right {
+    from { clip-path: polygon(99.999% 0, 100% 0, 100% 100%, 99.999% 100%); opacity: 0; }
+    to { clip-path: var(--clip-parallelogram); opacity: 1; }
+  }
+
+  /* Boot sequence once the hero has landed: the track powers up top to bottom,
+     the caps and checkpoints pop in one after another, then the marker drops. */
+  .xp-bar__track {
+    transform-origin: top;
+    animation: xp-boot 0.9s var(--ease-dramatic) 1.4s both;
+  }
+
+  .xp-bar__cap--start { animation: xp-pop 0.5s var(--ease) 1.3s both; }
+  .xp-bar__cap--end { animation: xp-pop 0.5s var(--ease) 2.2s both; }
+
+  .xp-bar__checkpoint {
+    animation: xp-pop 0.5s var(--ease) calc(1.6s + var(--i, 0) * 0.12s) both;
+  }
+
+  .xp-bar__checkpoint.is-reached {
+    animation: xp-pop 0.5s var(--ease) both;
+  }
+
+  .xp-bar__marker {
+    animation: xp-drop 0.6s var(--ease) 2.3s both;
+  }
+
+  .xp-bar__marker::before {
+    animation: xp-core 0.9s ease-in-out infinite alternate;
+  }
+
+  .xp-bar__fill::after {
+    animation: xp-pulse 2.4s linear infinite;
+  }
+
+  .xp-bar.is-complete .xp-bar__cap--end {
+    animation: xp-victory 0.9s var(--ease-dramatic) both;
+  }
+
+  .xp-bar.is-complete .xp-bar__label--end {
+    animation: mask-reveal-from-right 0.7s var(--ease-dramatic) both;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -677,8 +1122,19 @@ main {
 
   .site-header,
   .skip-link,
-  .button {
+  .button,
+  .xp-bar {
     display: none;
+  }
+
+  .js .section__header > *,
+  .js .entry,
+  .js .entry__description,
+  .js .tool,
+  .js .language {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
   }
 
   main {
@@ -747,13 +1203,15 @@ main {
   .section--about__eyebrow,
   .section--about .heading--display,
   .section--about__description,
-  .contact-list {
+  .contact-list,
+  .stat-list {
     opacity: 1;
     animation: none;
   }
 }
 
 </style>
+  <script>document.documentElement.classList.add("js");</script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -777,10 +1235,12 @@ main {
     <div class="section__inner">
       <p class="eyebrow section--about__eyebrow">Resume</p>
       <h1 id="about-heading" class="heading heading--display">Guilherme Frediani</h1>
-      <div class="copy copy--large section--about__description">
-        <p>Product professional with 3+ years of experience, looking to transition into the gaming industry.</p>
-      </div>
-      <ul class="contact-list">
+      <div class="about__grid">
+        <div class="copy copy--large section--about__description">
+          <p>Product professional with 3+ years of experience, looking to transition into the gaming industry.</p>
+        </div>
+        <div class="about__side">
+          <ul class="contact-list">
       <li class="contact-list__item contact-list__item--location">
         <img class="contact-list__icon" src="data:image/png;base64,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" alt="" width="24" height="24">
         <span>Valinhos, São Paulo, Brazil</span>
@@ -798,6 +1258,13 @@ main {
         <a href="https://x.com/gfredsmth" target="_blank" rel="noopener noreferrer">@gfredsmth<span class="external-mark" aria-hidden="true">↗</span><span class="visually-hidden">(opens in a new tab)</span></a>
       </li>
     </ul>
+          <ul class="stat-list">
+        <li class="stat"><span class="stat__value">4+</span> <span class="stat__label">Years of experience</span></li>
+        <li class="stat"><span class="stat__value">2</span> <span class="stat__label">Certifications</span></li>
+        <li class="stat"><span class="stat__value">2</span> <span class="stat__label">Languages</span></li>
+      </ul>
+        </div>
+      </div>
     </div>
   </section>
 <section id="professional-experience" class="section content-gutter" aria-labelledby="professional-experience-heading">
@@ -835,7 +1302,8 @@ main {
       </ol>
     </div>
   </section>
-<section id="academic-experience" class="section content-gutter" aria-labelledby="academic-experience-heading">
+<div class="section-pair content-gutter">
+<section id="academic-experience" class="section section--half" aria-labelledby="academic-experience-heading">
     <div class="section__inner">
       <div class="section__header">
         <h2 id="academic-experience-heading" class="heading heading--2">Academic Experience</h2>
@@ -854,7 +1322,7 @@ main {
       </ol>
     </div>
   </section>
-<section id="certifications" class="section content-gutter" aria-labelledby="certifications-heading">
+<section id="certifications" class="section section--half" aria-labelledby="certifications-heading">
     <div class="section__inner">
       <div class="section__header">
         <h2 id="certifications-heading" class="heading heading--2">Certifications</h2>
@@ -871,7 +1339,9 @@ main {
       </ul>
     </div>
   </section>
-<section id="tools" class="section content-gutter" aria-labelledby="tools-heading">
+</div>
+<div class="section-pair content-gutter">
+<section id="tools" class="section section--half" aria-labelledby="tools-heading">
     <div class="section__inner">
       <div class="section__header">
         <h2 id="tools-heading" class="heading heading--2">Tools &amp; Games</h2>
@@ -887,7 +1357,7 @@ main {
       </ul>
     </div>
   </section>
-<section id="languages" class="section content-gutter" aria-labelledby="languages-heading">
+<section id="languages" class="section section--half" aria-labelledby="languages-heading">
     <div class="section__inner">
       <div class="section__header">
         <h2 id="languages-heading" class="heading heading--2">Languages</h2>
@@ -904,10 +1374,146 @@ main {
       </ul>
     </div>
   </section>
+</div>
   </main>
   <footer class="site-footer content-gutter">
     <p class="copy copy--small copy--muted">© 2026 Guilherme Frediani</p>
     <a class="button" href="#top">Back to top</a>
   </footer>
+  <div class="xp-bar" aria-hidden="true" hidden>
+    <span class="xp-bar__cap xp-bar__cap--start"></span>
+    <span class="xp-bar__label xp-bar__label--start">Start</span>
+    <div class="xp-bar__track">
+      <div class="xp-bar__fill"></div>
+      <ol class="xp-bar__checkpoints"></ol>
+      <span class="xp-bar__marker"></span>
+      <span class="xp-bar__hud"><span class="xp-bar__level">Lv 1</span><span class="xp-bar__value">0%</span></span>
+    </div>
+    <span class="xp-bar__cap xp-bar__cap--end"></span>
+    <span class="xp-bar__label xp-bar__label--end">Victory</span>
+  </div>
+<script>
+// Progressive enhancement: streaming reveal on scroll and the XP reading-progress bar.
+// The page is complete without this file; styles.css only hides content under html.js,
+// a class set by the inline script in <head>.
+
+(() => {
+  const root = document.documentElement;
+
+  // ---- Streaming reveal -------------------------------------------------------
+  const REVEAL = ".section:not(.section--about) .section__header, .entry, .tool, .language";
+  const targets = document.querySelectorAll(REVEAL);
+
+  if (!("IntersectionObserver" in window)) {
+    root.classList.remove("js");
+  } else {
+    const observer = new IntersectionObserver(
+      (records) => {
+        // Items entering together are staggered so the list streams in one by one.
+        let order = 0;
+        for (const record of records) {
+          if (!record.isIntersecting) continue;
+          record.target.style.setProperty("--reveal-delay", `${Math.min(order, 8) * 0.09}s`);
+          record.target.classList.add("is-visible");
+          observer.unobserve(record.target);
+          order += 1;
+        }
+      },
+      { rootMargin: "0px 0px -6% 0px", threshold: 0.1 },
+    );
+    targets.forEach((target) => observer.observe(target));
+  }
+
+  // ---- XP bar -----------------------------------------------------------------
+  const bar = document.querySelector(".xp-bar");
+  if (!bar) return;
+
+  const list = bar.querySelector(".xp-bar__checkpoints");
+  const levelText = bar.querySelector(".xp-bar__level");
+  const valueText = bar.querySelector(".xp-bar__value");
+  const marker = bar.querySelector(".xp-bar__marker");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const sections = [...document.querySelectorAll("main section[id]")];
+  let checkpoints = [];
+  let level = 0;
+  let queued = false;
+
+  const maxScroll = () => Math.max(0, root.scrollHeight - window.innerHeight);
+
+  // One checkpoint per distinct section start; paired sections share a row and a checkpoint.
+  function measure() {
+    const max = maxScroll();
+    const offset = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+    const stops = [];
+    for (const section of sections) {
+      const top = section.getBoundingClientRect().top + window.scrollY - offset;
+      const stop = max > 0 ? Math.min(1, Math.max(0, top / max)) : 0;
+      if (!stops.some((existing) => Math.abs(existing - stop) < 0.005)) stops.push(stop);
+    }
+    // Rebuild only when the count changes (pairs stack below 960px); otherwise just
+    // move the existing items so their pop-in animation does not replay.
+    if (stops.length !== checkpoints.length) {
+      list.replaceChildren();
+      checkpoints = stops.map((stop, index) => {
+        const item = document.createElement("li");
+        item.className = "xp-bar__checkpoint";
+        item.style.setProperty("--i", String(index));
+        list.append(item);
+        return { item, stop };
+      });
+    }
+    checkpoints.forEach((checkpoint, index) => {
+      checkpoint.stop = stops[index];
+      checkpoint.item.style.top = `${(stops[index] * 100).toFixed(2)}%`;
+    });
+    update();
+  }
+
+  function update() {
+    queued = false;
+    const max = maxScroll();
+    const progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 1;
+    bar.style.setProperty("--p", progress.toFixed(4));
+
+    let reached = 0;
+    for (const { item, stop } of checkpoints) {
+      const on = progress >= stop - 0.002;
+      item.classList.toggle("is-reached", on);
+      if (on) reached += 1;
+    }
+    if (reached > level && level > 0 && !reducedMotion.matches && marker.animate) {
+      // Level-up flash: the marker swells and throws off a ring of light.
+      marker.animate(
+        [
+          { scale: "1", filter: "brightness(1)" },
+          { scale: "1.8", filter: "brightness(1.8)", offset: 0.35 },
+          { scale: "1", filter: "brightness(1)" },
+        ],
+        { duration: 650, easing: "cubic-bezier(.215,.61,.355,1)" },
+      );
+    }
+    level = reached;
+
+    levelText.textContent = `Lv ${Math.max(1, reached)}`;
+    valueText.textContent = `${Math.round(progress * 100)}%`;
+    bar.classList.toggle("is-started", progress > 0.005);
+    bar.classList.toggle("is-complete", progress >= 0.995);
+  }
+
+  const schedule = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  };
+
+  bar.hidden = false;
+  measure();
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", measure);
+  if ("ResizeObserver" in window) new ResizeObserver(() => measure()).observe(document.body);
+  document.fonts?.ready.then(measure);
+})();
+
+</script>
 </body>
 </html>

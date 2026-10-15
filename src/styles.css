@@ -28,8 +28,10 @@
   /* Space */
   --space-2: 8px; --space-4: 16px; --space-5: 20px; --space-6: 24px; --space-8: 30px;
   --space-10: 40px; --space-12: 50px; --space-15: 60px; --space-20: 80px; --space-25: 100px;
+  --space-1: 4px; --space-3: 12px;
   --gutter: 20px; --gutter-md: 40px; --gutter-lg: 80px;
-  --container: 1440px; --container-narrow: 953.333px; --container-text: 466.667px;
+  --container: 1440px; --container-wide: 1196.667px; --container-narrow: 953.333px; --container-text: 466.667px;
+  --measure: 72ch;
 
   /* Shape */
   --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-xl: 24px; --radius-pill: 32px;
@@ -180,24 +182,27 @@ ul, ol {
   line-height: 1.3;
 }
 
+/* Section headings stay heavy but smaller than the design system's 5rem so a
+   heading does not cost a whole screen row on a resume this short. */
 @media (min-width: 550px) {
   .heading--display { font-size: 5rem; line-height: 0.88; }
-  .heading--2 { font-size: 3.75rem; line-height: 1.07; }
+  .heading--2 { font-size: 3rem; line-height: 1.07; }
   .heading--4 { font-size: 1.75rem; line-height: 1.25; }
   .heading--5 { font-size: 1.375rem; }
 }
 
 @media (min-width: 960px) {
   .heading--display { font-size: 7.5rem; line-height: 0.85; }
-  .heading--2 { font-size: 5rem; line-height: 1.07; }
-  .heading--4 { font-size: 2rem; line-height: 1.23; }
-  .heading--5 { font-size: 1.5rem; }
+  .heading--2 { font-size: 3.5rem; line-height: 1.05; }
+  .heading--4 { font-size: 1.75rem; line-height: 1.23; }
+  .heading--5 { font-size: 1.375rem; }
 }
 
+/* Text runs to a comfortable reading measure instead of the 466px column. */
 .copy {
   font-size: 1rem;
   line-height: var(--lh-body);
-  max-width: var(--container-text);
+  max-width: var(--measure);
 }
 
 .copy p + p {
@@ -302,15 +307,35 @@ main {
 
 @media (min-width: 960px) {
   main {
-    row-gap: var(--space-25);
-    padding-top: calc(var(--header-height) + var(--space-20));
-    padding-bottom: var(--space-25);
+    row-gap: var(--space-20);
+    padding-top: calc(var(--header-height) + var(--space-15));
+    padding-bottom: var(--space-20);
   }
 }
 
 .section__inner {
-  max-width: var(--container-narrow);
+  max-width: var(--container-wide);
   margin: 0 auto;
+}
+
+/* Two short sections share one row on desktop instead of each leaving half the width empty. */
+.section-pair {
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--space-12);
+}
+
+@media (min-width: 960px) {
+  .section-pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-20);
+    width: 100%;
+    max-width: calc(var(--container-wide) + 2 * var(--gutter-lg));
+    margin: 0 auto;
+  }
+
+  .section--half .heading--2 { font-size: 2.75rem; }
 }
 
 .section__header {
@@ -321,7 +346,7 @@ main {
 }
 
 @media (min-width: 960px) {
-  .section__header { margin-bottom: var(--space-15); }
+  .section__header { margin-bottom: var(--space-10); }
 }
 
 /* --------------------------------------------------------------------------
@@ -339,7 +364,7 @@ main {
 
 .site-header__inner {
   height: var(--header-height);
-  max-width: var(--container);
+  max-width: calc(var(--container-wide) + 2 * var(--gutter-lg));
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -408,8 +433,30 @@ main {
   margin-bottom: var(--space-4);
 }
 
-.section--about__description {
+/* Description on the left, contacts and stats on the right: the hero fills the
+   row instead of leaving the right half of the screen empty. */
+.about__grid {
+  display: grid;
+  gap: var(--space-10);
   margin-top: var(--space-8);
+}
+
+.about__side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+@media (min-width: 960px) {
+  .about__grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--space-15);
+    align-items: start;
+    margin-top: var(--space-12);
+  }
+}
+
+.section--about__description {
   color: var(--color-text-subtle);
 }
 
@@ -417,7 +464,39 @@ main {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  margin-top: var(--space-10);
+}
+
+/* Stat blocks (design-system.md section 7.8). */
+.stat-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: var(--space-3);
+}
+
+.stat {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background-color: var(--overlay-card);
+  font-size: 0.6875rem;
+  line-height: 1.3;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+.stat__value {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--color-text);
+}
+
+@media (min-width: 960px) {
+  .stat { padding: var(--space-5); font-size: 0.75rem; }
+  .stat__value { font-size: 3rem; }
 }
 
 .contact-list__item {
@@ -450,7 +529,7 @@ main {
   color: var(--color-text-subtle);
 }
 
-@media (min-width: 550px) {
+@media (min-width: 550px) and (max-width: 959px) {
   .contact-list {
     flex-direction: row;
     flex-wrap: wrap;
@@ -502,6 +581,36 @@ main {
 
 .entry__description {
   margin-top: var(--space-2);
+}
+
+/* Full-width experience on desktop: dates in a narrow left column, title and
+   description across the rest, so descriptions use the row instead of a strip. */
+@media (min-width: 960px) {
+  .section:not(.section--half) .entry-list { gap: 0; }
+
+  .section:not(.section--half) .entry {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    grid-template-areas: "dates title" "dates description";
+    column-gap: var(--space-10);
+    row-gap: var(--space-2);
+    padding: var(--space-8) 0;
+    border-left: 0;
+    border-top: 1px solid var(--color-surface-alt);
+  }
+
+  .section:not(.section--half) .entry--current {
+    border-top: 2px solid var(--color-accent);
+  }
+
+  .section:not(.section--half) .entry__title { grid-area: title; }
+  .section:not(.section--half) .entry__dates { grid-area: dates; padding-top: 0.6em; font-size: 0.75rem; }
+  .section:not(.section--half) .entry__description {
+    grid-area: description;
+    margin-top: 0;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
 }
 
 .entry-list--compact {
@@ -595,7 +704,7 @@ main {
   justify-content: space-between;
   gap: var(--space-4);
   flex-wrap: wrap;
-  max-width: var(--container);
+  max-width: calc(var(--container-wide) + 2 * var(--gutter-lg));
   margin: 0 auto;
   padding-top: var(--space-15);
   padding-bottom: var(--space-10);
@@ -643,7 +752,8 @@ main {
   .section--about__eyebrow,
   .section--about .heading--display,
   .section--about__description,
-  .contact-list {
+  .contact-list,
+  .stat-list {
     opacity: 0;
     animation: reveal-up var(--dur-reveal) var(--ease) forwards;
   }
@@ -652,6 +762,341 @@ main {
   .section--about .heading--display { animation-delay: 0.8s; }
   .section--about__description { animation-delay: 1.2s; }
   .contact-list { animation-delay: 1.4s; }
+  .stat-list { animation-delay: 1.6s; }
+}
+
+/* --------------------------------------------------------------------------
+   11b. Streaming reveal on scroll (design-system.md section 6.2)
+   Only active when enhance.js has run (html.js) and motion is allowed, so the
+   page is fully visible without JavaScript. enhance.js adds .is-visible.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The mask sits on the heading, not on the observed header: a fully clipped
+     target would never count as intersecting. */
+  .js .section:not(.section--about) .section__header > * {
+    opacity: 0;
+    clip-path: polygon(99.999% 0, 100% 0, 100% 100%, 99.999% 100%);
+    transition:
+      clip-path var(--dur-reveal) var(--ease-dramatic) var(--reveal-delay, 0s),
+      opacity var(--dur-slow) var(--ease) var(--reveal-delay, 0s);
+  }
+
+  .js .section:not(.section--about) .section__header.is-visible > * {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .js .entry,
+  .js .tool,
+  .js .language {
+    opacity: 0;
+    transform: translateY(60px);
+    transition:
+      opacity 0.8s var(--ease) var(--reveal-delay, 0s),
+      transform 0.8s var(--ease) var(--reveal-delay, 0s);
+  }
+
+  .js .entry.is-visible,
+  .js .tool.is-visible,
+  .js .language.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The description streams in just after its title. */
+  .js .entry__description {
+    opacity: 0;
+    transition: opacity 0.8s var(--ease) calc(var(--reveal-delay, 0s) + 0.3s);
+  }
+
+  .js .entry.is-visible .entry__description {
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   11c. XP bar: reading progress on the right edge, drawn like a game HUD.
+   A diamond marker travels down a track from START to VICTORY, each section
+   is a checkpoint that "levels up" when reached. enhance.js sets --p (0..1),
+   positions the checkpoints and toggles the state classes.
+   -------------------------------------------------------------------------- */
+
+.xp-bar {
+  --p: 0;
+  --xp-color: var(--color-accent);
+  position: fixed;
+  z-index: 40;
+  top: calc(var(--header-height) + var(--space-4));
+  bottom: var(--space-4);
+  right: 2px;
+  width: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.xp-bar[hidden] {
+  display: none;
+}
+
+.xp-bar.is-complete {
+  --xp-color: var(--color-gold);
+}
+
+.xp-bar__cap {
+  position: relative;
+  flex: none;
+  width: 10px;
+  height: 10px;
+  transform: rotate(45deg);
+  border: 2px solid var(--color-border);
+  background-color: var(--color-bg);
+  transition: background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease), transform 0.6s var(--ease-dramatic);
+}
+
+.xp-bar__cap--start {
+  border-color: var(--color-accent);
+}
+
+.xp-bar.is-started .xp-bar__cap--start {
+  background-color: var(--color-accent);
+}
+
+.xp-bar.is-complete .xp-bar__cap--end {
+  border-color: var(--color-gold);
+  background-color: var(--color-gold);
+  transform: rotate(405deg) scale(1.5);
+}
+
+.xp-bar__track {
+  position: relative;
+  flex: 1;
+  width: 3px;
+  margin: var(--space-2) 0;
+  background-color: var(--color-surface-alt);
+}
+
+.xp-bar__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: calc(var(--p) * 100%);
+  overflow: hidden;
+  background-color: var(--xp-color);
+  box-shadow: 0 0 8px var(--xp-color);
+  transition: background-color 0.6s var(--ease), box-shadow 0.6s var(--ease);
+}
+
+/* Energy pulse running down the filled part of the bar. */
+.xp-bar__fill::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  top: -60px;
+  background: linear-gradient(to bottom, transparent, rgba(249, 249, 249, 0.85), transparent);
+}
+
+.xp-bar__checkpoints {
+  position: absolute;
+  inset: 0;
+}
+
+.xp-bar__checkpoint {
+  position: absolute;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  transform: rotate(45deg);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  transition: background-color var(--dur-slow) var(--ease), border-color var(--dur-slow) var(--ease);
+}
+
+.xp-bar__checkpoint.is-reached {
+  background-color: var(--xp-color);
+  border-color: var(--xp-color);
+}
+
+.xp-bar__marker {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--p) * 100%);
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 2px solid var(--xp-color);
+  background-color: var(--color-bg-black);
+  box-shadow: 0 0 10px var(--xp-color);
+  transition: border-color 0.6s var(--ease), box-shadow 0.6s var(--ease);
+}
+
+.xp-bar__marker::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  background-color: var(--xp-color);
+  transition: background-color 0.6s var(--ease);
+}
+
+/* HUD labels: level and percent beside the marker, START and VICTORY at the ends.
+   Shown only where the side gutter is wide enough not to cover the text. */
+.xp-bar__hud,
+.xp-bar__label {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .xp-bar {
+    right: var(--space-6);
+    width: 24px;
+  }
+
+  .xp-bar__cap { width: 12px; height: 12px; }
+  .xp-bar__track { width: 4px; }
+  .xp-bar__checkpoint { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; }
+  .xp-bar__marker { width: 20px; height: 20px; }
+  .xp-bar__marker::before { inset: 4px; }
+
+  .xp-bar__hud,
+  .xp-bar__label {
+    display: flex;
+    position: absolute;
+    right: calc(100% + var(--space-3));
+    align-items: center;
+    gap: var(--space-2);
+    padding: 3px 14px;
+    clip-path: var(--clip-parallelogram);
+    background-color: var(--color-bg-deep);
+    font-size: 0.625rem;
+    line-height: 1.6;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--color-text);
+  }
+
+  .xp-bar__hud {
+    top: calc(var(--p) * 100%);
+    transform: translateY(-50%);
+  }
+
+  .xp-bar__level {
+    padding: 0 6px;
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    transition: background-color 0.6s var(--ease), color 0.6s var(--ease);
+  }
+
+  .xp-bar.is-complete .xp-bar__level {
+    background-color: var(--color-gold);
+    color: var(--color-bg-black);
+  }
+
+  .xp-bar__value {
+    min-width: 3.2em;
+    text-align: right;
+    color: var(--color-text-subtle);
+  }
+
+  .xp-bar__label--start { top: -4px; }
+  .xp-bar__label--end { bottom: -4px; color: var(--color-bg-black); background-color: var(--color-gold); }
+
+  /* START is shown until the player moves; VICTORY appears at the end. The HUD
+     hides at both ends so it never covers the end labels. */
+  .xp-bar.is-started .xp-bar__label--start,
+  .xp-bar:not(.is-complete) .xp-bar__label--end,
+  .xp-bar:not(.is-started) .xp-bar__hud,
+  .xp-bar.is-complete .xp-bar__hud {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .xp-bar__label,
+  .xp-bar__hud {
+    transition: opacity var(--dur-slow) var(--ease), visibility var(--dur-slow);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes xp-boot {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+  }
+
+  @keyframes xp-pop {
+    0% { transform: rotate(45deg) scale(0); }
+    70% { transform: rotate(45deg) scale(1.6); }
+    100% { transform: rotate(45deg) scale(1); }
+  }
+
+  @keyframes xp-drop {
+    from { opacity: 0; top: -40px; }
+  }
+
+  @keyframes xp-pulse {
+    to { transform: translateY(calc(100vh + 60px)); }
+  }
+
+  @keyframes xp-core {
+    from { opacity: 1; }
+    to { opacity: 0.45; }
+  }
+
+  @keyframes xp-victory {
+    0% { transform: rotate(45deg) scale(1); }
+    50% { transform: rotate(225deg) scale(2.2); }
+    100% { transform: rotate(405deg) scale(1.5); }
+  }
+
+  @keyframes mask-reveal-from-right {
+    from { clip-path: polygon(99.999% 0, 100% 0, 100% 100%, 99.999% 100%); opacity: 0; }
+    to { clip-path: var(--clip-parallelogram); opacity: 1; }
+  }
+
+  /* Boot sequence once the hero has landed: the track powers up top to bottom,
+     the caps and checkpoints pop in one after another, then the marker drops. */
+  .xp-bar__track {
+    transform-origin: top;
+    animation: xp-boot 0.9s var(--ease-dramatic) 1.4s both;
+  }
+
+  .xp-bar__cap--start { animation: xp-pop 0.5s var(--ease) 1.3s both; }
+  .xp-bar__cap--end { animation: xp-pop 0.5s var(--ease) 2.2s both; }
+
+  .xp-bar__checkpoint {
+    animation: xp-pop 0.5s var(--ease) calc(1.6s + var(--i, 0) * 0.12s) both;
+  }
+
+  .xp-bar__checkpoint.is-reached {
+    animation: xp-pop 0.5s var(--ease) both;
+  }
+
+  .xp-bar__marker {
+    animation: xp-drop 0.6s var(--ease) 2.3s both;
+  }
+
+  .xp-bar__marker::before {
+    animation: xp-core 0.9s ease-in-out infinite alternate;
+  }
+
+  .xp-bar__fill::after {
+    animation: xp-pulse 2.4s linear infinite;
+  }
+
+  .xp-bar.is-complete .xp-bar__cap--end {
+    animation: xp-victory 0.9s var(--ease-dramatic) both;
+  }
+
+  .xp-bar.is-complete .xp-bar__label--end {
+    animation: mask-reveal-from-right 0.7s var(--ease-dramatic) both;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -666,8 +1111,19 @@ main {
 
   .site-header,
   .skip-link,
-  .button {
+  .button,
+  .xp-bar {
     display: none;
+  }
+
+  .js .section__header > *,
+  .js .entry,
+  .js .entry__description,
+  .js .tool,
+  .js .language {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
   }
 
   main {
@@ -736,7 +1192,8 @@ main {
   .section--about__eyebrow,
   .section--about .heading--display,
   .section--about__description,
-  .contact-list {
+  .contact-list,
+  .stat-list {
     opacity: 1;
     animation: none;
   }

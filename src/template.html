@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800;900&family=Inter:wght@400;700&display=swap">
   <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add("js");</script>
+  <script src="enhance.js" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -34,5 +36,17 @@
     <p class="copy copy--small copy--muted">© {{year}} {{name}}</p>
     <a class="button" href="#top">Back to top</a>
   </footer>
+  <div class="xp-bar" aria-hidden="true" hidden>
+    <span class="xp-bar__cap xp-bar__cap--start"></span>
+    <span class="xp-bar__label xp-bar__label--start">Start</span>
+    <div class="xp-bar__track">
+      <div class="xp-bar__fill"></div>
+      <ol class="xp-bar__checkpoints"></ol>
+      <span class="xp-bar__marker"></span>
+      <span class="xp-bar__hud"><span class="xp-bar__level">Lv 1</span><span class="xp-bar__value">0%</span></span>
+    </div>
+    <span class="xp-bar__cap xp-bar__cap--end"></span>
+    <span class="xp-bar__label xp-bar__label--end">Victory</span>
+  </div>
 </body>
 </html>

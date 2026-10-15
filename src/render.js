@@ -33,16 +33,47 @@ export function renderPage(content, template) {
   return html.replace("{{sections}}", renderSections(content));
 }
 
-/** The five sections in their fixed order. */
-export function renderSections(content) {
+/** The sections in their fixed order. Short sections are paired so they share a row on desktop. */
+export function renderSections(content, now = new Date()) {
+  const half = { half: true };
   return [
-    renderAbout(content.profile ?? {}, content.iconStatus ?? {}),
+    renderAbout(content.profile ?? {}, content.iconStatus ?? {}, computeStats(content, now)),
     renderExperienceSection("professional-experience", "Professional Experience", content.professionalExperience ?? []),
-    renderExperienceSection("academic-experience", "Academic Experience", content.academicExperience ?? []),
-    renderCertifications(content.certifications ?? []),
-    renderTools(content.tools ?? []),
-    renderLanguages(content.languages ?? []),
+    pair(
+      renderExperienceSection("academic-experience", "Academic Experience", content.academicExperience ?? [], half),
+      renderCertifications(content.certifications ?? [], half),
+    ),
+    pair(renderTools(content.tools ?? [], half), renderLanguages(content.languages ?? [], half)),
   ].join("\n");
+}
+
+function pair(first, second) {
+  return `<div class="section-pair content-gutter">\n${first}\n${second}\n</div>`;
+}
+
+/** Opening tag shared by the list sections; half-width sections take their gutter from the pair. */
+function sectionOpen(id, half) {
+  const classes = half ? "section section--half" : "section content-gutter";
+  return `<section id="${id}" class="${classes}" aria-labelledby="${id}-heading">`;
+}
+
+/** Headline numbers for the About section, derived from the content so they never go stale. */
+export function computeStats(content, now = new Date()) {
+  const stats = [];
+  const starts = (content.professionalExperience ?? [])
+    .filter((entry) => isObject(entry) && isYearMonth(entry.startDate))
+    .map((entry) => entry.startDate)
+    .sort();
+  if (starts.length > 0) {
+    const [year, month] = starts[0].split("-").map(Number);
+    const years = Math.floor((now.getUTCFullYear() * 12 + now.getUTCMonth() - (year * 12 + month - 1)) / 12);
+    if (years >= 1) stats.push({ value: `${years}+`, label: years === 1 ? "Year of experience" : "Years of experience" });
+  }
+  const certifications = (content.certifications ?? []).filter(isObject).length;
+  if (certifications > 0) stats.push({ value: String(certifications), label: certifications === 1 ? "Certification" : "Certifications" });
+  const languages = (content.languages ?? []).filter(isObject).length;
+  if (languages > 0) stats.push({ value: String(languages), label: languages === 1 ? "Language" : "Languages" });
+  return stats;
 }
 
 function icon(kind, file, iconStatus) {
@@ -50,7 +81,7 @@ function icon(kind, file, iconStatus) {
   return `<img class="contact-list__icon" src="icons/${file}" alt="" width="24" height="24">`;
 }
 
-export function renderAbout(profile, iconStatus = {}) {
+export function renderAbout(profile, iconStatus = {}, stats = []) {
   const items = [];
 
   if (!isBlank(profile.location)) {
@@ -89,15 +120,25 @@ export function renderAbout(profile, iconStatus = {}) {
 
   const name = isBlank(profile.name) ? "Your Name" : profile.name.trim();
   const contacts = items.length > 0 ? `<ul class="contact-list">\n      ${items.join("\n      ")}\n    </ul>` : "";
+  const statList = stats.length > 0
+    ? `<ul class="stat-list">\n        ${stats
+        .map((stat) => `<li class="stat"><span class="stat__value">${escapeHtml(stat.value)}</span> <span class="stat__label">${escapeHtml(stat.label)}</span></li>`)
+        .join("\n        ")}\n      </ul>`
+    : "";
 
   return `<section id="about" class="section section--about content-gutter" aria-labelledby="about-heading">
     <div class="section__inner">
       <p class="eyebrow section--about__eyebrow">Resume</p>
       <h1 id="about-heading" class="heading heading--display">${escapeHtml(name)}</h1>
-      <div class="copy copy--large section--about__description">
-        ${paragraphs(profile.description)}
+      <div class="about__grid">
+        <div class="copy copy--large section--about__description">
+          ${paragraphs(profile.description)}
+        </div>
+        <div class="about__side">
+          ${contacts}
+          ${statList}
+        </div>
       </div>
-      ${contacts}
     </div>
   </section>`;
 }
@@ -109,7 +150,7 @@ function renderDate(value) {
   return escapeHtml(String(value));
 }
 
-export function renderExperienceSection(id, heading, entries) {
+export function renderExperienceSection(id, heading, entries, { half = false } = {}) {
   const valid = entries.filter(isObject);
   const items = sortByStartDate(valid).map((entry) => {
     const ongoing = entry.endDate === undefined || entry.endDate === null;
@@ -128,7 +169,7 @@ ${isBlank(entry.description) ? "" : `
 
   const body = items.length > 0 ? `<ol class="entry-list">\n        ${items.join("\n        ")}\n      </ol>` : EMPTY_MESSAGE;
 
-  return `<section id="${id}" class="section content-gutter" aria-labelledby="${id}-heading">
+  return `${sectionOpen(id, half)}
     <div class="section__inner">
       <div class="section__header">
         <h2 id="${id}-heading" class="heading heading--2">${heading}</h2>
@@ -138,7 +179,7 @@ ${isBlank(entry.description) ? "" : `
   </section>`;
 }
 
-export function renderCertifications(list) {
+export function renderCertifications(list, { half = false } = {}) {
   const items = list.filter(isObject).map(
     (entry) => `<li class="entry entry--compact">
           <h3 class="entry__title heading heading--5">${escapeHtml(isBlank(entry.title) ? "Untitled" : entry.title.trim())}</h3>
@@ -147,7 +188,7 @@ export function renderCertifications(list) {
   );
   const body = items.length > 0 ? `<ul class="entry-list entry-list--compact">\n        ${items.join("\n        ")}\n      </ul>` : EMPTY_MESSAGE;
 
-  return `<section id="certifications" class="section content-gutter" aria-labelledby="certifications-heading">
+  return `${sectionOpen("certifications", half)}
     <div class="section__inner">
       <div class="section__header">
         <h2 id="certifications-heading" class="heading heading--2">Certifications</h2>
@@ -157,13 +198,13 @@ export function renderCertifications(list) {
   </section>`;
 }
 
-export function renderTools(list) {
+export function renderTools(list, { half = false } = {}) {
   const items = list
     .filter((entry) => isObject(entry) && !isBlank(entry.name))
     .map((entry) => `<li class="tool tag">${escapeHtml(entry.name.trim())}</li>`);
   const body = items.length > 0 ? `<ul class="tool-list">\n        ${items.join("\n        ")}\n      </ul>` : EMPTY_MESSAGE;
 
-  return `<section id="tools" class="section content-gutter" aria-labelledby="tools-heading">
+  return `${sectionOpen("tools", half)}
     <div class="section__inner">
       <div class="section__header">
         <h2 id="tools-heading" class="heading heading--2">Tools &amp; Games</h2>
@@ -173,7 +214,7 @@ export function renderTools(list) {
   </section>`;
 }
 
-export function renderLanguages(list) {
+export function renderLanguages(list, { half = false } = {}) {
   const items = list.filter(isObject).map(
     (entry) => `<li class="language">
           <span class="language__name heading heading--5">${escapeHtml(isBlank(entry.name) ? "Unnamed" : entry.name.trim())}</span>
@@ -182,7 +223,7 @@ export function renderLanguages(list) {
   );
   const body = items.length > 0 ? `<ul class="language-list">\n        ${items.join("\n        ")}\n      </ul>` : EMPTY_MESSAGE;
 
-  return `<section id="languages" class="section content-gutter" aria-labelledby="languages-heading">
+  return `${sectionOpen("languages", half)}
     <div class="section__inner">
       <div class="section__header">
         <h2 id="languages-heading" class="heading heading--2">Languages</h2>

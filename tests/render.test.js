@@ -9,6 +9,7 @@ import {
   renderCertifications,
   renderTools,
   renderLanguages,
+  computeStats,
 } from "../src/render.js";
 
 const template = readFileSync(new URL("../src/template.html", import.meta.url), "utf8");
@@ -213,4 +214,16 @@ test("empty lists render the No entries yet message and no list element", () => 
   assert.ok(lang.includes(empty));
   assert.ok(!lang.includes("<ul"));
   assert.ok(lang.includes("<h2"), "heading still present");
+});
+
+test("about stats are derived from the content and skip empty categories", () => {
+  const stats = computeStats(fixture(), new Date(Date.UTC(2026, 9, 15)));
+  assert.deepEqual(stats, [
+    { value: "7+", label: "Years of experience" },
+    { value: "2", label: "Certifications" },
+    { value: "2", label: "Languages" },
+  ]);
+  assert.deepEqual(computeStats({ certifications: [], languages: [{ name: "Portuguese" }] }), [{ value: "1", label: "Language" }]);
+  const html = renderAbout(fixture().profile, allIcons, stats);
+  assert.ok(html.includes('<li class="stat"><span class="stat__value">7+</span> <span class="stat__label">Years of experience</span></li>'));
 });

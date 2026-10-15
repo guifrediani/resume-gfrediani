@@ -11,6 +11,7 @@ import { renderPage } from "./render.js";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TEMPLATE = join(ROOT, "src", "template.html");
 const STYLES = join(ROOT, "src", "styles.css");
+const SCRIPT = join(ROOT, "src", "enhance.js");
 const ICONS = join(ROOT, "icons");
 
 function usage(message) {
@@ -76,6 +77,7 @@ function main() {
   mkdirSync(join(options.out, "icons"), { recursive: true });
   writeFileSync(join(options.out, "index.html"), html, "utf8");
   copyFileSync(STYLES, join(options.out, "styles.css"));
+  copyFileSync(SCRIPT, join(options.out, "enhance.js"));
   if (existsSync(ICONS)) {
     for (const file of readdirSync(ICONS)) {
       if (file.toLowerCase().endsWith(".png")) {
