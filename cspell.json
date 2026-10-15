@@ -1,6 +1,6 @@
 {
   "version": "0.2",
   "language": "en-US",
-  "words": ["Guilherme", "Frediani", "Valinhos", "gfredsmth", "CSPO", "Teamfight"],
+  "words": ["Guilherme", "Frediani", "Valinhos", "gfredsmth", "CSPO", "Teamfight", "Instituto", "Pesquisas", "Eldorado"],
   "ignorePaths": ["node_modules/**"]
 }
