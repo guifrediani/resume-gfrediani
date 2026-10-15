@@ -105,6 +105,7 @@
       "required": ["title", "description", "startDate"],
       "properties": {
         "title": { "$ref": "#/$defs/nonBlankString" },
+        "company": { "type": "string", "description": "Optional employer name; blank hides it." },
         "description": { "$ref": "#/$defs/nonBlankString" },
         "startDate": { "$ref": "#/$defs/yearMonth" },
         "endDate": {

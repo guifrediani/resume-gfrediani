@@ -134,7 +134,8 @@ export function renderExperienceSection(id, heading, entries, { half = false } =
     const end = ongoing ? '<span class="entry__present">Present</span>' : renderDate(entry.endDate);
     return `<li class="${classes}">
           <h3 class="entry__title heading heading--4">${escapeHtml(isBlank(entry.title) ? "Untitled" : entry.title.trim())}</h3>
-          <p class="entry__dates eyebrow">${start} – ${end}</p>
+${isBlank(entry.company) ? "" : `          <p class="entry__company">${escapeHtml(entry.company.trim())}</p>
+`}          <p class="entry__dates eyebrow">${start} – ${end}</p>
 ${isBlank(entry.description) ? "" : `
           <div class="entry__description copy">
             ${paragraphs(entry.description)}

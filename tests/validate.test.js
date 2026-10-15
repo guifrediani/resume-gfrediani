@@ -289,3 +289,11 @@ test("validate reads a file written to disk the same as inline text", () => {
   const { errors } = run(JSON.stringify(baseContent()));
   assert.deepEqual(errors, []);
 });
+
+test("company is optional but must be a string when present", () => {
+  const content = baseContent();
+  content.professionalExperience[0].company = "Acme";
+  assert.equal(find(run(content).warnings, "professionalExperience[0].company"), undefined);
+  content.professionalExperience[0].company = 42;
+  assert.ok(find(run(content).warnings, "professionalExperience[0].company"));
+});

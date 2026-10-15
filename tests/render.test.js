@@ -214,3 +214,13 @@ test("empty lists render the No entries yet message and no list element", () => 
   assert.ok(!lang.includes("<ul"));
   assert.ok(lang.includes("<h2"), "heading still present");
 });
+
+test("professional entries show the company under the title and hide it when blank", () => {
+  const html = renderExperienceSection("professional-experience", "Professional Experience", [
+    { title: "Owner", company: "Acme <Games>", description: "d", startDate: "2024-01" },
+    { title: "Intern", company: "  ", description: "d", startDate: "2020-01", endDate: "2021-01" },
+  ]);
+  assert.ok(html.includes('<p class="entry__company">Acme &lt;Games&gt;</p>'));
+  assert.ok(html.indexOf("Owner</h3>") < html.indexOf("entry__company"));
+  assert.equal((html.match(/entry__company/g) ?? []).length, 1);
+});

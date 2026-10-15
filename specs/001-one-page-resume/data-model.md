@@ -50,7 +50,8 @@ same shape; the list it sits in decides the section.
 
 | Field | Type | Required | Rules |
 |-------|------|----------|-------|
-| `title` | string | yes | Non-blank. Role and organization for professional entries, degree and institution for academic entries, in whatever wording the owner prefers. |
+| `title` | string | yes | Non-blank. Role for professional entries, degree and institution for academic entries, in whatever wording the owner prefers. |
+| `company` | string | no | Employer name, shown under the title. Blank or missing hides it. |
 | `description` | string | yes | Non-blank. Line breaks become paragraph breaks. |
 | `startDate` | string | yes | `YYYY-MM`, month 01 to 12. |
 | `endDate` | string or null | no | `YYYY-MM` when present. Missing or `null` means ongoing and renders as `Present`. |

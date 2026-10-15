@@ -150,6 +150,10 @@ function validateExperiences(list, key, warn, { descriptionRequired = true } = {
       return;
     }
     if (isBlank(entry.title)) warn(`${path}.title`, "missing or blank; expected the entry title.");
+    // company is optional; a blank string simply hides it.
+    if (entry.company !== undefined && typeof entry.company !== "string") {
+      warn(`${path}.company`, `expected a string, found ${describeType(entry.company)}; it will be ignored.`);
+    }
     if (descriptionRequired && isBlank(entry.description)) warn(`${path}.description`, "missing or blank; expected a description.");
     if (entry.startDate === undefined) {
       warn(`${path}.startDate`, "missing; expected YYYY-MM.");

@@ -13,18 +13,21 @@
   "professionalExperience": [
     {
       "title": "Mid-level Product Owner",
+      "company": "",
       "description": "Responsible for keeping the backlog up to date, establishing acceptance criteria, understanding constraints and risks, deciding what should be done next, and keeping stakeholders aligned.\nManaged the development of an AI assistant for the financial market, from discovery all the way to post-launch activities.\nI also take part in preparing proposals for new projects.",
       "startDate": "2025-04",
       "endDate": null
     },
     {
       "title": "Junior Product Manager",
+      "company": "",
       "description": "Responsible for managing global Android software releases with Motorola: more than 150 releases affecting 5M+ users. Fixes were related to carrier requests and field issues.",
       "startDate": "2023-06",
       "endDate": "2025-04"
     },
     {
       "title": "Product Manager Intern",
+      "company": "",
       "description": "Responsible for helping the PM team with manual tasks in Jira and Salesforce while learning the end-to-end process. By the end of the internship, I was able to manage a new software release by myself.",
       "startDate": "2022-07",
       "endDate": "2023-06"
