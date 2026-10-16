@@ -8,6 +8,7 @@ import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { validate, formatMessage } from "./validate.js";
 import { renderPage } from "./render.js";
+import { parseResume, describePath } from "./markdown.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TEMPLATE = join(ROOT, "src", "template.html");
@@ -22,7 +23,7 @@ function usage(message) {
 }
 
 function parseArgs(argv) {
-  const options = { strict: false, out: join(ROOT, "dist"), content: join(ROOT, "content", "resume.json") };
+  const options = { strict: false, out: join(ROOT, "dist"), content: join(ROOT, "content", "resume.md") };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === "--strict") {
@@ -56,7 +57,22 @@ function main() {
     usage(`cannot read template ${TEMPLATE}: ${err.message}`);
   }
 
-  const { content, errors, warnings } = validate(rawText, { iconsDir: ICONS });
+  // Markdown is the authoring format; a .json file is still accepted as-is.
+  let content, errors, warnings;
+  if (options.content.toLowerCase().endsWith(".md")) {
+    const parsed = parseResume(rawText);
+    if (parsed.errors.length > 0) {
+      ({ content, errors, warnings } = parsed);
+    } else {
+      const checked = validate(JSON.stringify(parsed.content), { iconsDir: ICONS });
+      const locate = (message) => ({ ...message, path: describePath(message.path, parsed.content) });
+      content = checked.content;
+      errors = checked.errors.map(locate);
+      warnings = [...parsed.warnings, ...checked.warnings.map(locate)];
+    }
+  } else {
+    ({ content, errors, warnings } = validate(rawText, { iconsDir: ICONS }));
+  }
   const failing = options.strict ? [...errors, ...warnings] : errors;
 
   for (const message of [...errors, ...warnings]) {

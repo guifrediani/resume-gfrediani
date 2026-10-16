@@ -10,10 +10,10 @@ workflow can depend on them.
 
 | Script | Command | Purpose |
 |--------|---------|---------|
-| `npm run build` | `node src/build.js` | Validate `content/resume.json`, render `dist/index.html`, copy `src/styles.css` and `icons/` into `dist/`. Warnings do not stop the build. |
+| `npm run build` | `node src/build.js` | Parse and validate `content/resume.md`, render `dist/index.html`, copy `src/styles.css` and `icons/` into `dist/`. Warnings do not stop the build. |
 | `npm run build -- --strict` | `node src/build.js --strict` | Same, but any warning is treated as an error and the build fails. |
 | `npm test` | `node --test tests/` | Unit tests for validate, format, render, and the built output. Runs a build into a temporary directory first where needed. |
-| `npm run check` | `npm run build -- --strict && npm test && html-validate dist/index.html && cspell --no-progress "dist/index.html" "content/resume.json"` | The pre-deploy gate. Must pass before any publish. |
+| `npm run check` | `npm run build -- --strict && npm test && html-validate dist/index.html && cspell --no-progress "dist/index.html" "content/resume.md"` | The pre-deploy gate. Must pass before any publish. |
 
 `npm run build` and `npm test` need no installed packages. `npm run check` needs
 `npm install` for `html-validate` and `cspell`.
@@ -22,7 +22,7 @@ workflow can depend on them.
 
 | Path | Role |
 |------|------|
-| `content/resume.json` | Content source. Must satisfy `contracts/resume-content.schema.json`. |
+| `content/resume.md` | Content source in Markdown (front matter, `#` sections, `##` items). `src/markdown.js` turns it into the object described by `contracts/resume-content.schema.json`. A `.json` file passed with `--content` is still read directly. |
 | `src/template.html` | Page skeleton with `{{placeholder}}` slots filled by `render.js`. |
 | `src/styles.css` | Copied as-is to `dist/styles.css`. |
 | `icons/*.png` | Copied as-is to `dist/icons/`. Only files referenced by the data model are required. |
@@ -33,7 +33,7 @@ Optional flags:
 |------|--------|
 | `--strict` | Promote warnings to errors (exit 1). |
 | `--out <dir>` | Write output to `<dir>` instead of `dist/`. Used by tests. |
-| `--content <file>` | Read content from `<file>` instead of `content/resume.json`. Used by tests. |
+| `--content <file>` | Read content from `<file>` (`.md` or `.json`) instead of `content/resume.md`. Used by tests. |
 
 ## Outputs
 

@@ -5,10 +5,11 @@ import { mkdtempSync, readdirSync, readFileSync, writeFileSync, existsSync } fro
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseResume } from "../src/markdown.js";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const BUILD = join(ROOT, "src", "build.js");
-const CONTENT = join(ROOT, "content", "resume.json");
+const CONTENT = join(ROOT, "content", "resume.md");
 const SECTION_IDS = ["about", "professional-experience", "academic-experience", "certifications", "tools", "languages"];
 
 let out;
@@ -85,7 +86,7 @@ test("no link leaves the page except mailto, tel, and marked external links", ()
 });
 
 test("each contact detail in the sample content has its icon image", () => {
-  const content = JSON.parse(readFileSync(CONTENT, "utf8"));
+  const { content } = parseResume(readFileSync(CONTENT, "utf8"));
   const expected = [
     [content.profile.location, "location.png"],
     [content.profile.email, "e-mail.png"],
@@ -106,7 +107,7 @@ test("no element declares a fixed width wider than 360px", () => {
 
 test("warnings do not block the build but --strict does", () => {
   const dir = mkdtempSync(join(tmpdir(), "resume-warn-"));
-  const content = JSON.parse(readFileSync(CONTENT, "utf8"));
+  const { content } = parseResume(readFileSync(CONTENT, "utf8"));
   content.professionalExperience[0].endDate = "2024-13";
   const file = join(dir, "resume.json");
   writeFileSync(file, JSON.stringify(content));

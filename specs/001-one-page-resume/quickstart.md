@@ -54,24 +54,24 @@ of `cspell.json`, not in an ignore rule.
 
 ## 4. Validate content editing (User Stories 2 and 3)
 
-1. Open `content/resume.json`.
-2. Append a new object to `professionalExperience` with `title`, `description`,
-   `startDate` `"2025-01"`, and no `endDate`.
-3. Change the `level` of one entry in `languages` and add an object with a `name` to
-   `tools`.
-4. Remove one entry from `certifications`.
+1. Open `content/resume.md` (the comment at its top explains the format).
+2. Under `# Match History`, add a `## Title` with `start: 2025-01` and `end: present`
+   on the lines below it, then a description with a `- bullet` list.
+3. Change the level after the colon of one line in `# Languages` and add a `- item` to
+   `# Tools & Games`.
+4. Remove one `## Title` block from `# Achievements`.
 5. Run `npm run build` and reload the page.
 
-Expected: the new role appears at the top of Professional Experience with `Present`
-as its end date; the language shows the new level; the new tool appears as a tag in the Tools
-section; the removed certification is gone;
+Expected: the new role appears at the top of Match History with `Present`
+as its end date and its bullets rendered; the language shows the new level; the new tool
+appears as a tag in Tools & Games; the removed achievement is gone;
 nothing else changed; no file outside `content/` was touched.
 
 Then break something on purpose:
 
-6. Set an `endDate` to `"2024-13"` and run `npm run build`.
+6. Set an `end:` to `2024-13` and run `npm run build`.
 
-Expected: a `WARN professionalExperience[i].endDate` line, exit code 0, and the page
+Expected: a `WARN content/resume.md:LINE (Match History › "Title" › end)` line, exit code 0, and the page
 still renders. Run `npm run build -- --strict` and expect exit code 1. Restore the date.
 
 ## 5. Manual browser checks (User Stories 1 and 4)

@@ -40,13 +40,23 @@ export function renderSections(content) {
   const half = { half: true };
   return [
     renderAbout(content.profile ?? {}, content.iconStatus ?? {}),
-    renderExperienceSection("professional-experience", "Professional Experience", content.professionalExperience ?? []),
+    renderExperienceSection("professional-experience", "Match History", content.professionalExperience ?? [], { icon: "match-history" }),
     pair(
-      renderExperienceSection("academic-experience", "Academic Experience", content.academicExperience ?? [], half),
-      renderCertifications(content.certifications ?? [], half),
+      renderExperienceSection("academic-experience", "Quests Completed", content.academicExperience ?? [], { ...half, icon: "quests" }),
+      renderCertifications(content.certifications ?? [], { ...half, icon: "achievements" }),
     ),
     pair(renderTools(content.tools ?? [], half), renderLanguages(content.languages ?? [], half)),
   ].join("\n");
+}
+
+/** Decorative icon placed before an entry title; the image itself comes from styles.css. */
+function entryIcon(icon) {
+  return icon ? `<span class="entry__icon entry__icon--${icon}" aria-hidden="true"></span>` : "";
+}
+
+/** Description markup: pre-rendered Markdown when present, otherwise plain-text paragraphs. */
+function description(item) {
+  return typeof item.descriptionHtml === "string" ? item.descriptionHtml : paragraphs(item.description);
 }
 
 function pair(first, second) {
@@ -118,7 +128,7 @@ export function renderAbout(profile, iconStatus = {}) {
       <h1 id="about-heading" class="heading heading--display">${escapeHtml(name)}</h1>
       <div class="about__grid">
         <div class="copy copy--large section--about__description">
-          ${paragraphs(profile.description)}
+          ${description(profile)}
         </div>
         <div class="about__side">
           ${contacts}
@@ -135,7 +145,7 @@ function renderDate(value) {
   return escapeHtml(String(value));
 }
 
-export function renderExperienceSection(id, heading, entries, { half = false } = {}) {
+export function renderExperienceSection(id, heading, entries, { half = false, icon = "" } = {}) {
   const valid = entries.filter(isObject);
   const items = sortByStartDate(valid).map((entry) => {
     const ongoing = entry.endDate === undefined || entry.endDate === null;
@@ -143,12 +153,12 @@ export function renderExperienceSection(id, heading, entries, { half = false } =
     const start = entry.startDate === undefined ? "" : renderDate(entry.startDate);
     const end = ongoing ? '<span class="entry__present">Present</span>' : renderDate(entry.endDate);
     return `<li class="${classes}">
-          <h3 class="entry__title heading heading--4">${escapeHtml(isBlank(entry.title) ? "Untitled" : entry.title.trim())}</h3>
+          <h3 class="entry__title heading heading--4">${entryIcon(icon)}${escapeHtml(isBlank(entry.title) ? "Untitled" : entry.title.trim())}</h3>
 ${isBlank(entry.company) ? "" : `          <p class="entry__company">${escapeHtml(entry.company.trim())}</p>
 `}          <p class="entry__dates eyebrow">${start} – ${end}</p>
 ${isBlank(entry.description) ? "" : `
           <div class="entry__description copy">
-            ${paragraphs(entry.description)}
+            ${description(entry)}
           </div>`}
         </li>`;
   });
@@ -165,10 +175,10 @@ ${isBlank(entry.description) ? "" : `
   </section>`;
 }
 
-export function renderCertifications(list, { half = false } = {}) {
+export function renderCertifications(list, { half = false, icon = "" } = {}) {
   const items = list.filter(isObject).map(
     (entry) => `<li class="entry entry--compact">
-          <h3 class="entry__title heading heading--5">${escapeHtml(isBlank(entry.title) ? "Untitled" : entry.title.trim())}</h3>
+          <h3 class="entry__title heading heading--5">${entryIcon(icon)}${escapeHtml(isBlank(entry.title) ? "Untitled" : entry.title.trim())}</h3>
           <p class="entry__dates eyebrow eyebrow--gold">${entry.date === undefined ? "" : renderDate(entry.date)}</p>
         </li>`,
   );
@@ -177,7 +187,7 @@ export function renderCertifications(list, { half = false } = {}) {
   return `${sectionOpen("certifications", half)}
     <div class="section__inner">
       <div class="section__header">
-        <h2 id="certifications-heading" class="heading heading--2">Certifications</h2>
+        <h2 id="certifications-heading" class="heading heading--2">Achievements</h2>
       </div>
       ${body}
     </div>

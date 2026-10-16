@@ -538,6 +538,96 @@ main {
   color: var(--color-text-subtle);
 }
 
+/* Icon before each item title. The PNG is used as a mask so the icon takes the
+   title's text color in both the dark theme and print. */
+.entry__icon {
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-right: 0.4em;
+  vertical-align: -0.1em;
+  background-color: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+.entry__icon--match-history { --icon: url("icons/match-history.png"); }
+.entry__icon--quests { --icon: url("icons/quests.png"); }
+.entry__icon--achievements { --icon: url("icons/achievements.png"); color: var(--color-gold); }
+
+/* Markdown inside descriptions: bullets, sub-headings and emphasis. */
+.copy ul,
+.copy ol {
+  margin: var(--space-4) 0 0;
+  padding-left: 1.25em;
+}
+
+.copy ul { list-style: none; }
+.copy ol { list-style: decimal; }
+
+.copy li + li {
+  margin-top: var(--space-2);
+}
+
+/* Bullets are small red diamonds, echoing the XP bar checkpoints. */
+.copy ul > li {
+  position: relative;
+}
+
+.copy ul > li::before {
+  content: "";
+  position: absolute;
+  left: -1.05em;
+  top: 0.62em;
+  width: 0.36em;
+  height: 0.36em;
+  transform: rotate(45deg);
+  background-color: var(--color-accent);
+}
+
+.copy ul ul,
+.copy ol ol,
+.copy ul ol,
+.copy ol ul {
+  margin-top: var(--space-2);
+}
+
+.copy > :first-child {
+  margin-top: 0;
+}
+
+.copy p + ul,
+.copy p + ol,
+.copy ul + p,
+.copy ol + p {
+  margin-top: var(--space-4);
+}
+
+.copy .md-heading {
+  margin: var(--space-6) 0 var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.copy h4.md-heading { font-size: 1.25rem; }
+.copy h5.md-heading { font-size: 1.0625rem; text-transform: uppercase; color: var(--color-text-subtle); }
+.copy h6.md-heading { font-size: 0.875rem; text-transform: uppercase; color: var(--color-text-subtle); }
+
+.copy strong { font-weight: 700; color: var(--color-white); }
+.copy em { font-style: italic; }
+
+.copy code {
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-alt);
+  font-size: 0.9em;
+}
+
+.copy a {
+  border-bottom: 1px solid var(--color-accent);
+}
+
 .entry__company {
   font-family: var(--font-display);
   font-size: 1rem;

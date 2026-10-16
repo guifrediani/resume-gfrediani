@@ -11,10 +11,11 @@
     "build": "node src/build.js",
     "bundle": "node src/build.js && node src/bundle.js",
     "test": "node --test \"tests/**/*.test.js\"",
-    "check": "npm run build -- --strict && npm test && html-validate dist/index.html && cspell --no-progress \"dist/index.html\" \"content/resume.json\""
+    "check": "npm run build -- --strict && npm test && html-validate dist/index.html && cspell --no-progress \"dist/index.html\" \"content/resume.md\""
   },
   "devDependencies": {
     "cspell": "^10.3.0",
-    "html-validate": "^11.15.0"
+    "html-validate": "^11.15.0",
+    "marked": "^18.1.1"
   }
 }
