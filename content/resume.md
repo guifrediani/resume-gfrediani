@@ -40,7 +40,7 @@ I also take part in preparing proposals for new projects and workshops/hackathon
 Main activities:
 * review the backlog to make sure items are still valuable
 * prioritize new feature requests from the customer
-* bring the design team together with the development team to provide shared knowledge about what should be built next
+* bring the design team together with the development team to provide common knowledge about what should be built next
 * align status and next steps with stakeholders
 * help to remove blockers
 * define the scope and dates of the next release with the customer
