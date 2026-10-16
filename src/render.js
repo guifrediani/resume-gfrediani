@@ -49,9 +49,9 @@ export function renderSections(content) {
   ].join("\n");
 }
 
-/** Decorative icon placed before an entry title; the image itself comes from styles.css. */
-function entryIcon(icon) {
-  return icon ? `<span class="entry__icon entry__icon--${icon}" aria-hidden="true"></span>` : "";
+/** Decorative icon placed before a section heading; the image itself comes from styles.css. */
+function sectionIcon(icon) {
+  return icon ? `<span class="section-icon section-icon--${icon}" aria-hidden="true"></span>` : "";
 }
 
 /** Description markup: pre-rendered Markdown when present, otherwise plain-text paragraphs. */
@@ -153,7 +153,7 @@ export function renderExperienceSection(id, heading, entries, { half = false, ic
     const start = entry.startDate === undefined ? "" : renderDate(entry.startDate);
     const end = ongoing ? '<span class="entry__present">Present</span>' : renderDate(entry.endDate);
     return `<li class="${classes}">
-          <h3 class="entry__title heading heading--4">${entryIcon(icon)}${escapeHtml(isBlank(entry.title) ? "Untitled" : entry.title.trim())}</h3>
+          <h3 class="entry__title heading heading--4">${escapeHtml(isBlank(entry.title) ? "Untitled" : entry.title.trim())}</h3>
 ${isBlank(entry.company) ? "" : `          <p class="entry__company">${escapeHtml(entry.company.trim())}</p>
 `}          <p class="entry__dates eyebrow">${start} – ${end}</p>
 ${isBlank(entry.description) ? "" : `
@@ -168,7 +168,7 @@ ${isBlank(entry.description) ? "" : `
   return `${sectionOpen(id, half)}
     <div class="section__inner">
       <div class="section__header">
-        <h2 id="${id}-heading" class="heading heading--2">${heading}</h2>
+        <h2 id="${id}-heading" class="heading heading--2">${sectionIcon(icon)}${heading}</h2>
       </div>
       ${body}
     </div>
@@ -178,7 +178,7 @@ ${isBlank(entry.description) ? "" : `
 export function renderCertifications(list, { half = false, icon = "" } = {}) {
   const items = list.filter(isObject).map(
     (entry) => `<li class="entry entry--compact">
-          <h3 class="entry__title heading heading--5">${entryIcon(icon)}${escapeHtml(isBlank(entry.title) ? "Untitled" : entry.title.trim())}</h3>
+          <h3 class="entry__title heading heading--5">${escapeHtml(isBlank(entry.title) ? "Untitled" : entry.title.trim())}</h3>
           <p class="entry__dates eyebrow eyebrow--gold">${entry.date === undefined ? "" : renderDate(entry.date)}</p>
         </li>`,
   );
@@ -187,7 +187,7 @@ export function renderCertifications(list, { half = false, icon = "" } = {}) {
   return `${sectionOpen("certifications", half)}
     <div class="section__inner">
       <div class="section__header">
-        <h2 id="certifications-heading" class="heading heading--2">Achievements</h2>
+        <h2 id="certifications-heading" class="heading heading--2">${sectionIcon(icon)}Achievements</h2>
       </div>
       ${body}
     </div>
