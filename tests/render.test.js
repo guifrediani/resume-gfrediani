@@ -235,10 +235,10 @@ test("LinkedIn opens in a new tab with a short label and is omitted when invalid
   assert.ok(!renderAbout(profile, allIcons).includes("contact-list__item--linkedin"));
 });
 
-test("section icons sit before the section heading, not before item titles", () => {
+test("section headings use the game-style names without icons", () => {
   const html = renderSections(fixture());
-  assert.ok(html.includes('<h2 id="professional-experience-heading" class="heading heading--2"><span class="section-icon section-icon--match-history" aria-hidden="true"></span>Match History</h2>'));
-  assert.ok(html.includes('<span class="section-icon section-icon--quests" aria-hidden="true"></span>Quests Completed</h2>'));
-  assert.ok(html.includes('<span class="section-icon section-icon--achievements" aria-hidden="true"></span>Achievements</h2>'));
-  assert.ok(!/<h3[^>]*><span class="section-icon/.test(html));
+  assert.ok(html.includes('<h2 id="professional-experience-heading" class="heading heading--2">Match History</h2>'));
+  assert.ok(html.includes('<h2 id="academic-experience-heading" class="heading heading--2">Quests Completed</h2>'));
+  assert.ok(html.includes('<h2 id="certifications-heading" class="heading heading--2">Achievements</h2>'));
+  assert.ok(!html.includes("section-icon"));
 });

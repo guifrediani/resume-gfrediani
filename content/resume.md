@@ -22,7 +22,7 @@ x-handle: @gfredsmth
 
 # About
 
-Product professional with 3+ years of experience, looking to transition into the gaming industry.
+Product professional with 4+ years of experience, looking to transition into the gaming industry.
 
 # Match History
 
@@ -33,16 +33,16 @@ end: present
 
 Responsible for keeping the backlog up to date, establishing acceptance criteria, understanding constraints and risks, deciding what should be done next, and keeping stakeholders aligned.
 
-Managed the development of an AI assistant for the financial market, from discovery all the way to post-launch activities, while also helping the AI team with manual validation and data preparation.
+Managed the development of an AI assistant for the financial market, from discovery through post-launch, while also supporting the AI team with manual validation and data preparation.
 
-I also take part in preparing proposals for new projects and workshops/hackathons, all tech-related.
+Also involved in preparing proposals for new projects, as well as tech workshops and hackathons.
 
 Main activities:
 * review the backlog to make sure items are still valuable
 * prioritize new feature requests from the customer
-* bring the design team together with the development team to provide common knowledge about what should be built next
+* bring the design and development teams together to build a shared understanding of what comes next
 * align status and next steps with stakeholders
-* help to remove blockers
+* help remove blockers
 * define the scope and dates of the next release with the customer
 
 ## Junior Product Manager
@@ -50,16 +50,16 @@ company: Instituto de Pesquisas ELDORADO
 start: 2023-06
 end: 2025-04
 
-Responsible for managing global Android software releases with Motorola: more than 150 releases affecting 5M+ users. Fixes were related to security patches, carrier requests, and field issues.
+Responsible for managing global Android software releases with Motorola: more than 150 releases affecting 5M+ users. Releases included security patches, carrier requests, and fixes for field issues.
 
 Main activities:
 * plan what should be included in the next version
 * align the release date with the software team and main stakeholders
-* inform main stakeholders about the validation process
-* submit the software for carrier-side tests, once all validations are finished
-* slowly deploy the software once it is approved by the carrier
+* keep main stakeholders informed about the validation process
+* submit the software for carrier testing once all validations are complete
+* gradually roll out the software once the carrier approves it
 * gather usage data from the first users of the new software and run a Go/No-Go analysis
-* fully deploy the software once the Go/No-Go gets approved
+* complete the rollout once the Go/No-Go is approved
 
 ## Product Manager Intern
 company: Instituto de Pesquisas ELDORADO

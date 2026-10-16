@@ -538,23 +538,6 @@ main {
   color: var(--color-text-subtle);
 }
 
-/* Icon before each section heading. The PNG is used as a mask so the icon takes the
-   heading's text color in both the dark theme and print. */
-.section-icon {
-  display: inline-block;
-  width: 0.85em;
-  height: 0.85em;
-  margin-right: 0.3em;
-  vertical-align: -0.08em;
-  background-color: currentColor;
-  -webkit-mask: var(--icon) center / contain no-repeat;
-  mask: var(--icon) center / contain no-repeat;
-}
-
-.section-icon--match-history { --icon: url("icons/match-history.png"); }
-.section-icon--quests { --icon: url("icons/quests.png"); }
-.section-icon--achievements { --icon: url("icons/achievements.png"); }
-
 /* Markdown inside descriptions: bullets, sub-headings and emphasis. */
 .copy ul,
 .copy ol {
