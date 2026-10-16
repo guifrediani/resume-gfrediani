@@ -553,7 +553,7 @@ main {
 
 .section-icon--match-history { --icon: url("icons/match-history.png"); }
 .section-icon--quests { --icon: url("icons/quests.png"); }
-.section-icon--achievements { --icon: url("icons/achievements.png"); color: var(--color-gold); }
+.section-icon--achievements { --icon: url("icons/achievements.png"); }
 
 /* Markdown inside descriptions: bullets, sub-headings and emphasis. */
 .copy ul,
