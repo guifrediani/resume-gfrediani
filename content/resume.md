@@ -33,16 +33,33 @@ end: present
 
 Responsible for keeping the backlog up to date, establishing acceptance criteria, understanding constraints and risks, deciding what should be done next, and keeping stakeholders aligned.
 
-Managed the development of an AI assistant for the financial market, from discovery all the way to post-launch activities.
+Managed the development of an AI assistant for the financial market, from discovery all the way to post-launch activities, while also helping the AI team with manual validation and data preparation.
 
-I also take part in preparing proposals for new projects.
+I also take part in preparing proposals for new projects and workshops/hackathons, all tech-related.
+
+Main activities:
+* review the backlog to make sure items are still valuable
+* prioritize new feature requests from the customer
+* bring the design team together with the development team to provide shared knowledge about what should be built next
+* align status and next steps with stakeholders
+* help to remove blockers
+* define the scope and dates of the next release with the customer
 
 ## Junior Product Manager
 company: Instituto de Pesquisas ELDORADO
 start: 2023-06
 end: 2025-04
 
-Responsible for managing global Android software releases with Motorola: more than 150 releases affecting 5M+ users. Fixes were related to carrier requests and field issues.
+Responsible for managing global Android software releases with Motorola: more than 150 releases affecting 5M+ users. Fixes were related to security patches, carrier requests, and field issues.
+
+Main activities:
+* plan what should be included in the next version
+* align the release date with the software team and main stakeholders
+* inform main stakeholders about the validation process
+* submit the software for carrier-side tests, once all validations are finished
+* slowly deploy the software once it is approved by the carrier
+* gather usage data from the first users of the new software and run a Go/No-Go analysis
+* fully deploy the software once the Go/No-Go gets approved
 
 ## Product Manager Intern
 company: Instituto de Pesquisas ELDORADO

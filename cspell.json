@@ -1,7 +1,7 @@
 {
   "version": "0.2",
   "language": "en-US",
-  "words": ["Guilherme", "Frediani", "Valinhos", "gfredsmth", "CSPO", "Teamfight", "Instituto", "Pesquisas", "Eldorado"],
+  "words": ["Guilherme", "Frediani", "Valinhos", "gfredsmth", "CSPO", "Teamfight", "Instituto", "Pesquisas", "Eldorado", "hackathon", "hackathons"],
   "ignoreRegExpList": ["/linkedin\\.com\\/in\\/[^<\\s\"]+/g"],
   "ignorePaths": ["node_modules/**"]
 }
